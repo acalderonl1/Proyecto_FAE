@@ -7,10 +7,10 @@ const m_usuario = sequelize.define('usuarios', {
         type: Sequelize.INTEGER,
         primaryKey: true
     },
-    usario: {
+    usuario: {
         type: Sequelize.TEXT
     },
-    constrasena: {
+    contrasena: {
         type: Sequelize.BOOLEAN
     }
 }, {

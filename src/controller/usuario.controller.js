@@ -2,13 +2,13 @@ import m_usuario from '../model/usuario_model'
 
 
 export async function createUsuario(req, res) {
-    const { usuario, constrasena } = req.body
+    const { usuario, contrasena } = req.body
     try {
         let new_usuario = await m_usuario.create({
             usuario,
-            constrasena
+            contrasena
         }, {
-            fields: ['usuario', 'constrasena']
+            fields: ['usuario', 'contrasena']
         })
 
         if (new_usuario) {

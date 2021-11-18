@@ -2,7 +2,7 @@ import express, { json } from'express'
 import morgan from 'morgan'
 // importing route
 import projectRoutes from './routes/projects'
-import taskRoutes from './routes/tasks'
+import userRoutes from './routes/usuario_routes'
 
 
 const app = express();
@@ -14,7 +14,7 @@ app.use(json())
 
 // Routes
 app.use('/api/project', projectRoutes)
-app.use('/api/task', taskRoutes)
+app.use('/api/user', userRoutes)
 
 
 export default app

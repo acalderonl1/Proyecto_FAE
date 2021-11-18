@@ -1,21 +1,20 @@
-import task from '../model/task'
+import m_usuario from '../model/usuario_model'
 
 
-export async function createTask(req, res) {
-    const { name, done, indenproject } = req.body
+export async function createUsuario(req, res) {
+    const { usuario, constrasena } = req.body
     try {
-        let new_task = await task.create({
-            name,
-            done,
-            indenproject
+        let new_usuario = await m_usuario.create({
+            usuario,
+            constrasena
         }, {
-            fields: ['name', 'done', 'indenproject']
+            fields: ['usuario', 'constrasena']
         })
 
-        if (new_task) {
+        if (new_usuario) {
             return res.json({
-                message: 'Task create successfully',
-                data: new_task
+                message: 'user create successfully',
+                data: new_usuario
             })
         }
     } catch (e) {

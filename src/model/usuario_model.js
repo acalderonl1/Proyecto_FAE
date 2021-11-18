@@ -2,22 +2,19 @@ import Sequelize from "sequelize";
 import { sequelize } from '../database/database'
 
 
-const task = sequelize.define('tasks', {
+const m_usuario = sequelize.define('usuarios', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true
     },
-    name: {
+    usario: {
         type: Sequelize.TEXT
     },
-    done: {
+    constrasena: {
         type: Sequelize.BOOLEAN
-    },
-    idenproject : {
-        type: Sequelize.INTEGER
     }
 }, {
     timestamps: false
 })
 
-export default task
+export default m_usuario

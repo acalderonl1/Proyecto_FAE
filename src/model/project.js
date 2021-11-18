@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize'
 import { sequelize } from '../database/database'
-import task from './task'
+// import task from './usuario_model'
 
 const project = sequelize.define('projects', {
     id: {
@@ -24,7 +24,7 @@ const project = sequelize.define('projects', {
     timestamps: false
 })
 
-project.hasMany(task, {foreingKey: 'idenproject', souceKey: 'id'})
-task.belongsTo(project, {foreingKey: 'idenproject', souceKey: 'id'})
+// project.hasMany(task, {foreingKey: 'idenproject', souceKey: 'id'})
+// task.belongsTo(project, {foreingKey: 'idenproject', souceKey: 'id'})
 
 export default project

@@ -7,5 +7,5 @@ module.exports = function(app) {
 
     app.post('/usuario/create', usuarios.create);
     // Login
-    app.get('/cliente/login/:cedula/:contrasena', usuarios.filter);
+    app.get('/usuario/login/:cedula/:contrasena', usuarios.filter);
 }

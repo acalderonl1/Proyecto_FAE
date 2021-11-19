@@ -13,20 +13,15 @@ exports.create = (req, res) => {
         unidad: req.body.unidad,
         correo: req.body.correo,
         contrasena: req.body.contrasena,
-        fecha_creacion: req.body.fecha_creacion
-    }).then(usuario => {
-        res.json(usuario)
+        fecha_creacion: req.body.fecha_creacion,
+    }).then(usuarios => {
+        res.json(usuarios)
+        
     }).catch(err => {
-        res.status(500).json(
-            {
-                msg: "error",
-                message: err.error[0]['message'],
-                value: err.error[0]['value']
-            }
-        )
-        console.log('mensaje controlado', err)
-    })
-}
+        res.status(500).json({msg: "error", mensaje: err });
+        console.log('mensaje controlado' , err)
+    });
+};
 
 // logging of the Users
 exports.filter = (req, res) => {
@@ -41,7 +36,7 @@ exports.filter = (req, res) => {
             if (usuario_login[0].dataValues.contrasena == req.params.contrasena) {
                 res.json(
                     {
-                        "msg": "users created successfully"
+                        "msg": "logiado correctamente"
                     }
                 )
             } else {

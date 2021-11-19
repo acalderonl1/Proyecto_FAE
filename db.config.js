@@ -26,7 +26,7 @@ const db = {};
 // objeto de operadores
 db.Op = Op
 db.Sequelize = Sequelize;
-db.sequelize = sequelize;
+db.Sequelize = sequelize;
 
 //Models/tables
 db.tb_usuario = require('./components/usuarios/model.js')(sequelize, Sequelize);

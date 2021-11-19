@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize)=> {
-    const Usuarios = sequelize.define('tb_usuario',{
+    const Usuarios = sequelize.define('tb_usuarios',{
         grado_id: {
             type: Sequelize.STRING
         },
@@ -28,7 +28,6 @@ module.exports = (sequelize, Sequelize)=> {
         fecha_creacion: {
             type: Sequelize.DATE
         }
-
     },
     { timestamps: false})
     return Usuarios

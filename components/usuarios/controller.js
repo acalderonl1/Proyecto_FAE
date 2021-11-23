@@ -2,7 +2,7 @@ const path = require('path')
 const db = require(path.resolve(__dirname, '../../db.config'))
 const Usuarios = db.tb_usuario
 
-//post usuarios
+//post usuarios funcional
 exports.create = (req, res) => {
     Usuarios.create({
         grado_id: req.body.grado_id,
@@ -16,14 +16,38 @@ exports.create = (req, res) => {
         fecha_creacion: req.body.fecha_creacion,
     }).then(usuarios => {
         res.json(usuarios)
-        
+
     }).catch(err => {
-        res.status(500).json({msg: "error", mensaje: err });
-        console.log('mensaje controlado' , err)
+        res.status(500).json({ msg: "error", mensaje: err });
+        console.log('mensaje controlado', err)
     });
 };
 
-// logging of the Users
+
+//get user for cedula No funcional    
+exports.findOne = (req, res) => {
+    Usuarios.findOne|(req.params.cedula)
+    .then(usuarios => {
+        if(!usuario){
+            return res.status(404).json({
+                msg:"cedula no encontradae" + req.body.cedula
+            })
+        }
+        res.send(usuarios)
+    }).catch(err => {
+        if (err.kind == 'user_id'){
+            return res.status(404).json({
+                message: "cedula no encontradaw" + req.body.cedula
+            })
+        }
+        return res.status(500).json({
+            message: "cedula no encontradaq" + req.body.cedula
+        })
+    })
+}
+
+
+// logging the Users funcional
 exports.filter = (req, res) => {
     var filter = {}
     filter = {
@@ -46,7 +70,7 @@ exports.filter = (req, res) => {
                     }
                 )
             }
-        }else{
+        } else {
             res.json(
                 {
                     "msg": "Usuario no existe"
@@ -62,3 +86,37 @@ exports.filter = (req, res) => {
         )
     })
 }
+
+
+// update the users NO funcional
+exports.update_user = (req, res) => {
+    const Cedula = req.params.cedula;
+    Usuarios.update({
+        estado: req.params.estado
+    },
+        {
+            where: {
+                Cedula: req.params.cedula
+            }
+        })
+        .then(() => {
+            res.status(200).json(req.params);
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({
+                msg: "error", details: err
+            });
+        });
+};
+
+// find all data funcional
+exports.findAll = (req, res) => {
+    Usuarios.findAll()
+    .then(usuarios => {
+        res.send(usuarios);
+    }).catch(err => {
+        res.status(500).send({
+            message: err.message || "Some error occurred while retrieving data."
+        });
+    });
+};

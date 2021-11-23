@@ -31,4 +31,5 @@ db.Sequelize = sequelize;
 //Models/tables
 db.tb_usuario = require('./components/usuarios/model.js')(sequelize, Sequelize);
 
+
 module.exports = db;

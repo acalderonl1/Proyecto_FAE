@@ -26,7 +26,7 @@ exports.create = (req, res) => {
 
 //get user for cedula No funcional    
 exports.findOne = (req, res) => {
-    Usuarios.findOne|(req.params.cedula)
+    Usuarios.findOne(req.params.cedula)
     .then(usuarios => {
         if(!usuario){
             return res.status(404).json({
@@ -35,13 +35,8 @@ exports.findOne = (req, res) => {
         }
         res.send(usuarios)
     }).catch(err => {
-        if (err.kind == 'user_id'){
-            return res.status(404).json({
-                message: "cedula no encontradaw" + req.body.cedula
-            })
-        }
         return res.status(500).json({
-            message: "cedula no encontradaq" + req.body.cedula
+            message: "cedula no encontradaq"+err.message
         })
     })
 }
@@ -60,7 +55,7 @@ exports.filter = (req, res) => {
             if (usuario_login[0].dataValues.contrasena == req.params.contrasena) {
                 res.json(
                     {
-                        "msg": "logiado correctamente"
+                        "msg": "1"
                     }
                 )
             } else {

@@ -23,28 +23,25 @@ exports.create = (req, res) => {
     });
 };
 
-// [db.Op.like]: '%'+ req.params.cedula + '%'
-
-
 //get user for cedula funcional    
 exports.findOne = (req, res) => {
     var filter = {}
     console.log('parametros reveldes ' + req.params.cedula)
-	if(req.params.cedula > 0){
-		filter = {
-			where: {
-				cedula: req.params.cedula	   		    
-			}
-		}       
-	}
-	Usuarios.findAll(filter).then(usuarios => {
-		res.json(usuarios);
-  }).catch(err => {
-		console.log(err);
-		res.status(500).json({
-			msg: "error", details: err
-	  });
-	});    
+    if (req.params.cedula > 0) {
+        filter = {
+            where: {
+                cedula: req.params.cedula
+            }
+        }
+    }
+    Usuarios.findAll(filter).then(usuarios => {
+        res.json(usuarios);
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({
+            msg: "error", details: err
+        });
+    });
 }
 
 
@@ -91,17 +88,26 @@ exports.filter = (req, res) => {
 
 // update the users NO funcional
 exports.update_user = (req, res) => {
-    const Cedula = req.params.cedula;
+    const cedula = req.params.cedula;
     Usuarios.update({
-        estado: req.params.estado
+        grado_id: req.body.grado_id,
+        rol_id: req.body.rol_id,
+        nombre: req.body.nombre,
+        apellido: req.body.apellido,
+        cedula: req.body.cedula,
+        unidad: req.body.unidad,
+        correo: req.body.correo,
+        contrasena: req.body.contrasena,
+        fecha_creacion: req.body.fecha_creacion,
     },
         {
             where: {
-                Cedula: req.params.cedula
+                cedula: req.params.cedula
             }
         })
         .then(() => {
-            res.status(200).json(req.params);
+            res.status(200).json({app});
+            return app
         }).catch(err => {
             console.log(err);
             res.status(500).json({
@@ -113,23 +119,24 @@ exports.update_user = (req, res) => {
 // find all data funcional
 exports.findAll = (req, res) => {
     Usuarios.findAll()
-    .then(usuarios => {
-        res.send(usuarios);
-    }).catch(err => {
-        res.status(500).send({
-            message: err.message || "Some error occurred while retrieving data."
+        .then(usuarios => {
+            res.send(usuarios);
+        }).catch(err => {
+            res.status(500).send({
+                message: err.message || "Some error occurred while retrieving data."
+            });
         });
-    });
 };
 
+// delete a user for cedula
 exports.delete = (req, res) => {
-	const cedula = req.params.cedula;
-	Usuarios.destroy({
-			where: { cedula: cedula },
-		}).then(() => {
-			res.status(200).json( { msg: 'Registro eliminado -> Representante cedula = ' + cedula } );
-		}).catch(err => {
-			console.log(err);
-			res.status(500).json({msg: "error", details: err});
-		});
+    const cedula = req.params.cedula;
+    Usuarios.destroy({
+        where: { cedula: cedula },
+    }).then(() => {
+        res.status(200).json({ msg: 'Registro eliminado -> Representante cedula = ' + cedula });
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({ msg: "error", details: err });
+    });
 };

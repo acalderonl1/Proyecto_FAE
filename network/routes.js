@@ -12,7 +12,9 @@ module.exports = function(app) {
     // update user for cedula
     app.put('/usuario/update/:cedula', usuarios.update_user);
     // get for cedula
-    app.get('/usuario/getCedula/:cedula', usuarios.findOne);
+    app.get('/usuario/findOne/:cedula', usuarios.findOne);
     // get all users
     app.get('/usuario/getAll', usuarios.findAll);
+    // delete one user
+    app.delete('/usuario/delete/:cedula', usuarios.delete)
 }

@@ -23,22 +23,28 @@ exports.create = (req, res) => {
     });
 };
 
+// [db.Op.like]: '%'+ req.params.cedula + '%'
 
-//get user for cedula No funcional    
+
+//get user for cedula funcional    
 exports.findOne = (req, res) => {
-    Usuarios.findOne(req.params.cedula)
-    .then(usuarios => {
-        if(!usuario){
-            return res.status(404).json({
-                msg:"cedula no encontradae" + req.body.cedula
-            })
-        }
-        res.send(usuarios)
-    }).catch(err => {
-        return res.status(500).json({
-            message: "cedula no encontradaq"+err.message
-        })
-    })
+    var filter = {}
+    console.log('parametros reveldes ' + req.params.cedula)
+	if(req.params.cedula > 0){
+		filter = {
+			where: {
+				cedula: req.params.cedula	   		    
+			}
+		}       
+	}
+	Usuarios.findAll(filter).then(usuarios => {
+		res.json(usuarios);
+  }).catch(err => {
+		console.log(err);
+		res.status(500).json({
+			msg: "error", details: err
+	  });
+	});    
 }
 
 
@@ -114,4 +120,16 @@ exports.findAll = (req, res) => {
             message: err.message || "Some error occurred while retrieving data."
         });
     });
+};
+
+exports.delete = (req, res) => {
+	const cedula = req.params.cedula;
+	Usuarios.destroy({
+			where: { cedula: cedula },
+		}).then(() => {
+			res.status(200).json( { msg: 'Registro eliminado -> Representante cedula = ' + cedula } );
+		}).catch(err => {
+			console.log(err);
+			res.status(500).json({msg: "error", details: err});
+		});
 };

@@ -1,10 +1,10 @@
 module.exports = (sequelize, Sequelize)=> {
     const Usuarios = sequelize.define('tb_usuarios',{
-        grado_id: {
-            type: Sequelize.INTEGER,
+        grado: {
+            type: Sequelize.STRING,
         },
-        rol_id: {
-            type: Sequelize.INTEGER,
+        rol: {
+            type: Sequelize.STRING,
         },
         nombre: {
             type: Sequelize.STRING,
@@ -25,7 +25,16 @@ module.exports = (sequelize, Sequelize)=> {
         contrasena: {
             type: Sequelize.STRING,
         },
+        codigo: {
+            type: Sequelize.STRING,
+        },
         fecha_creacion: {
+            type: Sequelize.DATE,
+        },
+        fecha_reserva: {
+            type: Sequelize.DATE,
+        },
+        fecha_entrega: {
             type: Sequelize.DATE,
         }
     },

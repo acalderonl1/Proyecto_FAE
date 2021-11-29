@@ -39,3 +39,24 @@ CREATE TABLE tb_usuario(
 );
 
 select * from tb_usuario;
+
+--new table
+
+
+DROP TABLE IF EXISTS tb_usuarios;
+
+CREATE TABLE tb_usuarios(
+    user_id INTEGER GENERATED ALWAYS AS IDENTITY,
+    grado VARCHAR(255) NOT NULL,
+    roL VARCHAR(255) NOT NULL,
+    nombre VARCHAR(255) NOT NULL,
+    apellido VARCHAR(255) NOT NULL,
+    cedula INTEGER NOT NULL,
+    unidad VARCHAR(255) NOT NULL,
+    correo VARCHAR(255) NOT NULL,
+    contrasena VARCHAR(255) NOT NULL,
+    fecha_creacion TIMESTAMP NOT NULL DEFAULT NOW(),
+    fecha_reserva TIMESTAMP,
+    fecha_entrega TIMESTAMP,
+    PRIMARY KEY (user_id),
+);

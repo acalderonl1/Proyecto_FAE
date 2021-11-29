@@ -5,15 +5,18 @@ const Usuarios = db.tb_usuario
 //post usuarios funcional
 exports.create = (req, res) => {
     Usuarios.create({
-        grado_id: req.body.grado_id,
-        rol_id: req.body.rol_id,
+        grado: req.body.grado,
+        rol: req.body.rol,
         nombre: req.body.nombre,
         apellido: req.body.apellido,
         cedula: req.body.cedula,
         unidad: req.body.unidad,
         correo: req.body.correo,
         contrasena: req.body.contrasena,
+        codigo: req.body.codigo,
         fecha_creacion: req.body.fecha_creacion,
+        fecha_reserva: req.body.fecha_reserva,
+        fecha_entrega: req.body.fecha_entrega
     }).then(usuarios => {
         res.json(usuarios)
 
@@ -86,19 +89,22 @@ exports.filter = (req, res) => {
 }
 
 
-// update the users NO funcional
+// update the users funcional
 exports.update_user = (req, res) => {
     const cedula = req.params.cedula;
     Usuarios.update({
-        grado_id: req.body.grado_id,
-        rol_id: req.body.rol_id,
+        grado: req.body.grado,
+        rol: req.body.rol,
         nombre: req.body.nombre,
         apellido: req.body.apellido,
         cedula: req.body.cedula,
         unidad: req.body.unidad,
         correo: req.body.correo,
         contrasena: req.body.contrasena,
+        codigo: req.body.codigo,
         fecha_creacion: req.body.fecha_creacion,
+        fecha_reserva: req.body.fecha_reserva,
+        fecha_entrega: req.body.fecha_entrega
     },
         {
             where: {

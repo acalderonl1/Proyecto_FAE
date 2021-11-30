@@ -17,4 +17,6 @@ module.exports = function(app) {
     app.get('/usuario/getAll', usuarios.findAll);
     // delete one user
     app.delete('/usuario/delete/:cedula', usuarios.delete)
+    //Update for nombre
+    app.put('/usuario/update_correo/:correo', usuarios.update_correo);
 }

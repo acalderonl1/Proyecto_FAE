@@ -112,8 +112,7 @@ exports.update_user = (req, res) => {
             }
         })
         .then(() => {
-            res.status(200).json({app});
-            return app
+            res.status(200).json(req.params);
         }).catch(err => {
             console.log(err);
             res.status(500).json({
@@ -145,4 +144,35 @@ exports.delete = (req, res) => {
         console.log(err);
         res.status(500).json({ msg: "error", details: err });
     });
+};
+
+exports.update_correo = (req, res) => {
+    const correo = req.params.correo;
+    Usuarios.update({
+        grado: req.body.grado,
+        rol: req.body.rol,
+        nombre: req.body.nombre,
+        apellido: req.body.apellido,
+        cedula: req.body.cedula,
+        unidad: req.body.unidad,
+        correo: req.body.correo,
+        contrasena: req.body.contrasena,
+        codigo: req.body.codigo,
+        fecha_creacion: req.body.fecha_creacion,
+        fecha_reserva: req.body.fecha_reserva,
+        fecha_entrega: req.body.fecha_entrega
+    },
+        {
+            where: {
+                correo: req.params.correo
+            }
+        })
+        .then(() => {
+            res.status(200).json(req.params);
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({
+                msg: "error", details: err
+            });
+        });
 };

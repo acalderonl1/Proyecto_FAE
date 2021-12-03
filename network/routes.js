@@ -2,7 +2,7 @@ const { dirname } = require('path');
 const path = require('path')
 
 module.exports = function(app) {
-    const usuarios = require(path.resolve(__dirname, '../components/usuarios/controller.js'));
+    const usuarios = require(path.resolve(__dirname, '../components/usuario/controller.js'));
 
 
     // created user

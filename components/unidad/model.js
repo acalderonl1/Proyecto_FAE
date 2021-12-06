@@ -1,5 +1,11 @@
 module.exports = (sequelize, Sequelize)=> {
-    const Unidad = sequelize.define('unidad',{
+    const Unidades = sequelize.define('unidades',{
+        idunidad: {
+            type: Sequelize.UUID,
+            allowNull: false,
+            primaryKey: true,
+            autoIncrement: true
+        },
         utc: {
             type: Sequelize.DATE,
         },
@@ -11,5 +17,5 @@ module.exports = (sequelize, Sequelize)=> {
         },
     },
     { timestamps: false})
-    return Unidad
+    return Unidades
 }

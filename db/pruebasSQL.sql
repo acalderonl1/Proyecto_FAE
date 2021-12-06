@@ -12,6 +12,9 @@ select * from tiporancho;
 select * from menudia;
 select * from reserva;
 
+select g.nombrecorto as grado, p.nombres, r.nombre, u.codigo 
+from dar.personas p, dar.repartos r, dar.unidades u, DAR.grados g 
+where p.idreparto = r.idreparto and r.idunidad = u.idunidad and p.idgrado  = g.idgrado 
 
 delete from unidad 
  where idunidad =1;

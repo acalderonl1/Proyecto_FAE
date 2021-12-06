@@ -6,6 +6,7 @@ const Op = Sequelize.Op
 const sequelize = new Sequelize(env.database, env.username, env.password, {
   host: env.host,
   dialect: env.dialect,
+  schema: env.schema,
 
   pool: {
     max: env.max,
@@ -29,7 +30,7 @@ db.Sequelize = Sequelize;
 db.Sequelize = sequelize;
 
 //Models/tables
-db.tb_usuario = require('./components/usuarios/model.js')(sequelize, Sequelize);
+db.unidades = require('./components/unidad/model.js')(sequelize, Sequelize);
 
 
 module.exports = db;

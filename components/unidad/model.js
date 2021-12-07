@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize)=> {
-    const Unidades = sequelize.define('unidades',{
+    const Unidades = sequelize.define('unidad',{
         idunidad: {
             type: Sequelize.UUID,
             allowNull: false,

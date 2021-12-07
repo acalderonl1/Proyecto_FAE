@@ -1,5 +1,11 @@
 module.exports = (sequelize, Sequelize)=> {
-    const Persona = sequelize.define('persona',{
+    const Personas = sequelize.define('personas',{
+        idpersona: {
+            type: Sequelize.UUID,
+            allowNull: false,
+            primaryKey: true,
+            autoIncrement: true
+        },
         idreparto: {
             type: Sequelize.INTEGER,
         },
@@ -29,5 +35,5 @@ module.exports = (sequelize, Sequelize)=> {
         }
     },
     { timestamps: false})
-    return Persona
+    return Personas
 }

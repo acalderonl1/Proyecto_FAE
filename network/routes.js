@@ -3,8 +3,20 @@ const path = require('path')
 
 module.exports = function(app) {
     const Unidades = require(path.resolve(__dirname, '../components/unidad/controller.js'));
+    const Personas = require(path.resolve(__dirname, '../components/persona/controller.js'))
+    const Usuarios = require(path.resolve(__dirname, '../components/usuario/controller.js'))
 
+
+    // POST UNIDADES   
     app.post('/unidades/create', Unidades.create)
+
+    // POST PERSONAS
+    app.post('/personas/create', Personas.create)
+
+    // 
+    app.post('/usuarios/create', Usuarios.create)
+    app.get('/usuarios/getAll', Usuarios.findAll)
+
 
     // created user
     // app.post('/usuario/create', usuarios.create);

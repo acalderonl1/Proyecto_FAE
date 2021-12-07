@@ -31,6 +31,7 @@ db.Sequelize = sequelize;
 
 //Models/tables
 db.unidades = require('./components/unidad/model.js')(sequelize, Sequelize);
-
+db.personas = require('./components/persona/model.js')(sequelize, Sequelize);
+db.usuarios = require('./components/usuario/model.js')(sequelize, Sequelize);
 
 module.exports = db;

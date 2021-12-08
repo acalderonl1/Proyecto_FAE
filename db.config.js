@@ -16,13 +16,13 @@ const sequelize = new Sequelize(env.database, env.username, env.password, {
   },
 
 
-  dialectOptions: {
-    socketPath: '/Applications/MAMP/tmp/mysql/mysql.sock',
-    supportBigNumbers: true,
-    bigNumberStrings: true
-  },
-  storage: 'path/to/database.sqlite',
-  omitNull: true,
+  // dialectOptions: {
+  //   socketPath: '/Applications/MAMP/tmp/mysql/mysql.sock',
+  //   supportBigNumbers: true,
+  //   bigNumberStrings: true
+  // },
+  // storage: 'path/to/database.sqlite',
+  // omitNull: true,
   
   // Activar el soporte ssl en pg
   // - Predeterminado: falso
@@ -30,17 +30,17 @@ const sequelize = new Sequelize(env.database, env.username, env.password, {
   
   // Parámetros predeterminados de la base de datos, parámetros globales
   define: {
-    underscored: false,
+    // underscored: false,
     freezeTableName: true,
     charset: 'utf8',
-    dialectOptions: {
-      collate: 'utf8_general_ci'
-    },
-    timestamps: true
+    // dialectOptions: {
+    //   collate: 'utf8_general_ci'
+    // },
+    // timestamps: true
   },
   
   // ¿Está sincronizado?
-  sync: { force: true },
+  // sync: { force: true },
 
 });
 

@@ -2,9 +2,9 @@ module.exports = (sequelize, Sequelize)=> {
     const Comedor = sequelize.define('comedor',{
         idcomedor: {
             type: Sequelize.UUID,
-            // allowNull: false,
+            allowNull: false,
             primaryKey: true,
-            // autoIncrement: true
+            autoIncrement: true
         },
         idreparto: {
             type: Sequelize.INTEGER,

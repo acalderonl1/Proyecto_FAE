@@ -30,13 +30,13 @@ const sequelize = new Sequelize(env.database, env.username, env.password, {
   
   // Parámetros predeterminados de la base de datos, parámetros globales
   define: {
-    // underscored: false,
+    underscored: false,
     freezeTableName: true,
     charset: 'utf8',
-    // dialectOptions: {
-    //   collate: 'utf8_general_ci'
-    // },
-    // timestamps: true
+    dialectOptions: {
+      collate: 'utf8_general_ci'
+    },
+    timestamps: true
   },
   
   // ¿Está sincronizado?
@@ -60,9 +60,14 @@ db.Sequelize = sequelize;
 /* INVOCACION DE TODOS LOS MODELOS */
 db.comedor = require('./components/comedor/model.js')(sequelize, Sequelize);
 db.grado = require('./components/grado/model.js')(sequelize, Sequelize);
+db.menu = require('./components/menu/model.js')(sequelize, Sequelize);
+db.menudia = require('./components/menudia/model.js')(sequelize, Sequelize);
+db.persona = require('./components/persona/model.js')(sequelize, Sequelize);
+db.reparto = require('./components/reparto/model.js')(sequelize, Sequelize)
+
+
 
 db.unidades = require('./components/unidad/model.js')(sequelize, Sequelize);
-db.personas = require('./components/persona/model.js')(sequelize, Sequelize);
-db.usuarios = require('./components/usuario/model.js')(sequelize, Sequelize);
+db.usuario = require('./components/usuario/model.js')(sequelize, Sequelize);
 
 module.exports = db;

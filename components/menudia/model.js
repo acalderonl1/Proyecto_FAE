@@ -1,6 +1,12 @@
 module.exports = (sequelize, Sequelize)=> {
     const Menudia = sequelize.define('menudia',{
-        idiporancho: {
+        idmenudia: {
+            type: Sequelize.UUID,
+            allowNull: false,
+            primaryKey: true,
+            autoIncrement: true
+        },
+        idtiporancho: {
             type: Sequelize.INTEGER,
         },
         idmenu: {

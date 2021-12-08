@@ -1,16 +1,16 @@
 const path = require('path')
 const db = require(path.resolve(__dirname, '../../db.config'))
-const Comedor = db.comedor
+const Reparto = db.reparto
+
 
 //ingresar datos a la tabla
 exports.create = (req, res) => {
-    Comedor.create({
-        idreparto: req.body.idreparto,
+    Reparto.create({
+        idunidad: req.body.idunidad,
         nombre: req.body.nombre,
-        estado: req.body.estado,
-        utc: req.body.utc  
-    }).then(unidades => {
-        res.json(unidades)
+        codigo: req.body.codigo,
+    }).then(reparto => {
+        res.json(reparto)
 
     }).catch(err => {
         res.status(500).json({ msg: "error", mensaje: err });
@@ -18,20 +18,19 @@ exports.create = (req, res) => {
     });
 };
 
-//consultar datos por el 
-
+//consultar datos por el id
 exports.filter = (req, res) => {
-    const id = req.params.idcomedor
+    const id = req.params.idreparto
     var filter = {}
-    if (req.params.idcomedor > 0) {
+    if (req.params.idreparto > 0) {
         filter = {
             where: {
-                idcomedor: id
+                idreparto: id
             }
         }
     }
-    Comedor.findAll(filter).then(comedor => {
-        res.json(comedor);
+    Reparto.findAll(filter).then(reparto => {
+        res.json(reparto);
     }).catch(err => {
         console.log(err);
         res.status(500).json({
@@ -40,12 +39,11 @@ exports.filter = (req, res) => {
     });
 }
 
-
-// Consultar todos los datos de la tabla comedor 
+// Consultar todos los datos de la tabla 
 exports.findAll = (req, res) => {
-    Comedor.findAll()
-        .then(comedor => {
-            res.send(comedor);
+    Reparto.findAll()
+        .then(reparto => {
+            res.send(reparto);
         }).catch(err => {
             res.status(500).send({
                 message: err.message || "Some error occurred while retrieving data."
@@ -53,22 +51,19 @@ exports.findAll = (req, res) => {
         });
 };
 
-//Actualizar todos los datos de la tabla comedor
+//Actualizar todos los datos de la tabla
 exports.update = (req, res) => {
-    idcomedor = req.params.idcomedor
-    Comedor.update({
-        idreparto: req.body.idreparto,
+    Reparto.update({
+        idunidad: req.body.idunidad,
         nombre: req.body.nombre,
-        estado: req.body.estado,
-        utc: req.body.utc
+        codigo: req.body.codigo,
     },
         {
             where: {
-                idcomedor
+                idreparto: req.params.idreparto,
             }
         })
         .then(() => {
-            // console.log(res)
             res.status(200).json(req.body);
         }).catch(err => {
             console.log(err);
@@ -81,13 +76,13 @@ exports.update = (req, res) => {
 
 //Eliminar un registro de la tabla por id
 exports.delete = (req, res) => {
-	
-	Comedor.destroy({
-			where: { idcomedor: req.params.idcomedor },
-		}).then(() => {
-			res.status(200).json( { msg: 'Registro eliminado -> Representante Id = ' + req.params.idcomedor } );
-		}).catch(err => {
-			console.log(err);
-			res.status(500).json({msg: "error", details: err});
-		});
+    const id = req.params.reparto;
+    Reparto.destroy({
+        where: { idreparto  : id },
+    }).then(() => {
+        res.status(200).json({ msg: 'Registro eliminado -> Representante cedula = ' + id });
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({ msg: "error", details: err });
+    });
 };

@@ -1,15 +1,19 @@
 const path = require('path')
-const db = require(path.resolve(__dirname, '../../db.config'))
-const Grado = db.grado
+const db = require(path.resolve(__dirname, '../../db.config'));
+const Menudia = db.menudia
 
 //ingresar datos a la tabla
 exports.create = (req, res) => {
-    Grado.create({
-        nombre: req.body.nombre,
-        nombrecorto: req.body.nombrecorto,
-        utc: req.body.utc  
-    }).then(grado => {
-        res.json(grado)
+    Menudia.create({
+        idtiporancho: req.body.idtiporancho,
+        idmenu: req.body.idmenu,
+        idcomedor: req.body.idcomedor,
+        fecha: req.body.fecha,
+        precio: req.body.precio,
+        estado: req.body.estado,
+        utc: req.body.utc,
+    }).then(menudia => {
+        res.json(menudia)
 
     }).catch(err => {
         res.status(500).json({ msg: "error", mensaje: err });
@@ -19,17 +23,17 @@ exports.create = (req, res) => {
 
 //consultar datos por el id
 exports.filter = (req, res) => {
-    const id = req.params.idgrado
+    const id = req.params.idmenudia
     var filter = {}
-    if (req.params.idgrado > 0) {
+    if (req.params.idmenudia > 0) {
         filter = {
             where: {
-                idgrado: id
+                idmenudia: id
             }
         }
     }
-    Grado.findAll(filter).then(grado => {
-        res.json(grado);
+    Menudia.findAll(filter).then(menudia => {
+        res.json(menudia);
     }).catch(err => {
         console.log(err);
         res.status(500).json({
@@ -38,11 +42,11 @@ exports.filter = (req, res) => {
     });
 }
 
-// Consultar todos los datos de la tabla GRADO 
+// Consultar todos los datos de la tabla 
 exports.findAll = (req, res) => {
-    Grado.findAll()
-        .then(grado => {
-            res.send(grado);
+    Menudia.findAll()
+        .then(menudia => {
+            res.send(menudia);
         }).catch(err => {
             res.status(500).send({
                 message: err.message || "Some error occurred while retrieving data."
@@ -50,17 +54,20 @@ exports.findAll = (req, res) => {
         });
 };
 
-//Actualizar todos los datos de la tabla GRADO
+//Actualizar todos los datos de la tabla
 exports.update = (req, res) => {
-    const idgrado = req.params.idgrado;
-    Grado.update({
-        nombre: req.body.nombre,
-        nombrecorto: req.body.nombrecorto,
-        utc: req.body.utc 
+    Menudia.update({
+        idtiporancho: req.body.tiporancho,
+        idmenu: req.body.idmenu,
+        idcomedor: req.body.idcomedor,
+        fecha: req.body.fecha,
+        precio: req.body.precio,
+        estado: req.body.estado,
+        utc: req.body.utc,
     },
         {
             where: {
-                idgrado: req.params.idgrado,
+                idmenudia: req.params.idmenudia,
             }
         })
         .then(() => {
@@ -76,11 +83,11 @@ exports.update = (req, res) => {
 
 //Eliminar un registro de la tabla por id
 exports.delete = (req, res) => {
-    const idgrado = req.params.idgrado;
-    Grado.destroy({
-        where: { idgrado: idgrado },
+    const idmenudia = req.params.idmenudia;
+    Menudia.destroy({
+        where: { idmenudia: idmenudia },
     }).then(() => {
-        res.status(200).json({ msg: 'Registro eliminado -> Representante cedula = ' + idgrado });
+        res.status(200).json({ msg: 'Registro eliminado -> Representante cedula = ' + idmenudia });
     }).catch(err => {
         console.log(err);
         res.status(500).json({ msg: "error", details: err });

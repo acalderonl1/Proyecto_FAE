@@ -1,15 +1,13 @@
 const path = require('path')
-const db = require(path.resolve(__dirname, '../../db.config'))
-const Grado = db.grado
+const db = require(path.resolve(__dirname, '../../db.config'));
+const Menu = db.menu
 
 //ingresar datos a la tabla
 exports.create = (req, res) => {
-    Grado.create({
-        nombre: req.body.nombre,
-        nombrecorto: req.body.nombrecorto,
-        utc: req.body.utc  
-    }).then(grado => {
-        res.json(grado)
+    Menu.create({
+        descripcion: req.body.descripcion,  
+    }).then(menu => {
+        res.json(menu)
 
     }).catch(err => {
         res.status(500).json({ msg: "error", mensaje: err });
@@ -19,17 +17,17 @@ exports.create = (req, res) => {
 
 //consultar datos por el id
 exports.filter = (req, res) => {
-    const id = req.params.idgrado
+    const id = req.params.idmenu
     var filter = {}
-    if (req.params.idgrado > 0) {
+    if (req.params.idmenu > 0) {
         filter = {
             where: {
-                idgrado: id
+                idmenu: id
             }
         }
     }
-    Grado.findAll(filter).then(grado => {
-        res.json(grado);
+    Menu.findAll(filter).then(menu => {
+        res.json(menu);
     }).catch(err => {
         console.log(err);
         res.status(500).json({
@@ -38,11 +36,11 @@ exports.filter = (req, res) => {
     });
 }
 
-// Consultar todos los datos de la tabla GRADO 
+// Consultar todos los datos de la tabla 
 exports.findAll = (req, res) => {
-    Grado.findAll()
-        .then(grado => {
-            res.send(grado);
+    Menu.findAll()
+        .then(menu => {
+            res.send(menu);
         }).catch(err => {
             res.status(500).send({
                 message: err.message || "Some error occurred while retrieving data."
@@ -50,17 +48,14 @@ exports.findAll = (req, res) => {
         });
 };
 
-//Actualizar todos los datos de la tabla GRADO
+//Actualizar todos los datos de la tabla
 exports.update = (req, res) => {
-    const idgrado = req.params.idgrado;
-    Grado.update({
-        nombre: req.body.nombre,
-        nombrecorto: req.body.nombrecorto,
-        utc: req.body.utc 
+    Menu.update({
+        descripcion: req.body.descripcion
     },
         {
             where: {
-                idgrado: req.params.idgrado,
+                idmenu: req.params.idmenu,
             }
         })
         .then(() => {
@@ -76,11 +71,11 @@ exports.update = (req, res) => {
 
 //Eliminar un registro de la tabla por id
 exports.delete = (req, res) => {
-    const idgrado = req.params.idgrado;
-    Grado.destroy({
-        where: { idgrado: idgrado },
+    const idmenu = req.params.idmenu;
+    Menu.destroy({
+        where: { idmenu: idmenu },
     }).then(() => {
-        res.status(200).json({ msg: 'Registro eliminado -> Representante cedula = ' + idgrado });
+        res.status(200).json({ msg: 'Registro eliminado -> Representante cedula = ' + idmenu });
     }).catch(err => {
         console.log(err);
         res.status(500).json({ msg: "error", details: err });

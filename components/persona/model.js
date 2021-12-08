@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize)=> {
-    const Personas = sequelize.define('personas',{
+    const Persona = sequelize.define('persona',{
         idpersona: {
             type: Sequelize.UUID,
             allowNull: false,
@@ -35,5 +35,5 @@ module.exports = (sequelize, Sequelize)=> {
         }
     },
     { timestamps: false})
-    return Personas
+    return Persona
 }

@@ -1,7 +1,7 @@
-const path = require('path')
-const db = require(path.resolve(__dirname, '../../db.config'))
-const Usuarios = db.usuarios
-// const route = require('../../network/routes')
+// const path = require('path')
+// const db = require(path.resolve(__dirname, '../../db.config'))
+// const Usuario = db.usuario
+// // const route = require('../../network/routes')
 
 // persona = {
 //     idreparto: req.body.idreparto,
@@ -28,9 +28,7 @@ const Usuarios = db.usuarios
 // }
 // exports.create = (req, res) => {
 //     Usuarios.create({
-//         persona["idreparto"],
-
-//         opciones = {
+//         var opciones = {
 //             method: 'POST',
 //             body: JSON.stringify(persona) 
 //         },
@@ -51,13 +49,13 @@ const Usuarios = db.usuarios
 //     });
 // }
 
-exports.findAll = (req, res) => {
-    Usuarios.findAll()
-        .then(usuarios => {
-            res.send(usuarios);
-        }).catch(err => {
-            res.status(500).send({
-                message: err.message || "Some error occurred while retrieving data."
-            });
-        });
-};
+// exports.findAll = (req, res) => {
+//     Usuario.findAll()
+//         .then(usuario => {
+//             res.send(usuario);
+//         }).catch(err => {
+//             res.status(500).send({
+//                 message: err.message || "Some error occurred while retrieving data."
+//             });
+//         });
+// };

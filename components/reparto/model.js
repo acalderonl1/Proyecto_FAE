@@ -1,7 +1,10 @@
 module.exports = (sequelize, Sequelize)=> {
     const Reparto = sequelize.define('reparto',{
         idreparto: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.UUID,
+            allowNull: false,
+            primaryKey: true,
+            autoIncrement: true
         },
         idunidad: {
             type: Sequelize.INTEGER,

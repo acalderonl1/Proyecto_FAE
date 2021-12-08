@@ -576,15 +576,22 @@ class _HomePageState extends State<Registro> {
                                         'http://192.168.10.107:3000/usuario/create');
                                     print(url);
                                     var response = await http.post(url, body: {
-                                      'grado': grado_registro,
-                                      'rol': "Cliente",
-                                      'nombre': nombreRegistro.text,
-                                      'apellido': apellidosRegistro.text,
-                                      'cedula': cedulaRegistro.text,
-                                      'unidad': unidad_registro,
+                                      'idreparto': "1",
+                                      'idgrado': "2",
+                                      'nombres': nombreRegistro.text,
+                                      'telefono': apellidosRegistro.text,
                                       'correo': correoRegistro.text,
-                                      'contrasena': contrasenaRegistro.text,
-                                      'codigo': codigoRegistro.text,
+                                      'sexo': "M",
+                                      'dni': cedulaRegistro.text,
+                                      'estado': "A",
+                                    });
+                                    var url2 = Uri.parse(
+                                        'http://192.168.10.107:3000/usuario/create');
+                                    print(url2);
+                                    var response2 =
+                                        await http.post(url2, body: {
+                                      'usuario': grado_registro,
+                                      'contrasena': "Cliente",
                                     });
                                     if (response.statusCode == 200) {
                                       var jsonResponse =

@@ -1,7 +1,6 @@
 class Reserva {
   int _id = 0;
   String _nombre = "";
-
   double _precio_desayuno = 0;
   double _cantidad_plato = 0;
 

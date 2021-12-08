@@ -51,7 +51,7 @@ class restaurant extends State<restaurante> {
                     ),
                     Center(
                       child: Text(
-                        'Rancho Ala 22' + widget.idcliente,
+                        'Rancho Ala 22',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 30),

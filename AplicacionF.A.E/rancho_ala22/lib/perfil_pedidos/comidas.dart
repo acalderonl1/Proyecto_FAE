@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rancho_ala22/Widget_/widget_drawer_menu.dart';
-import 'package:rancho_ala22/perfil_pedidos/reserva_desayuno.dart';
+import 'package:rancho_ala22/scr/ui/desayuno_page.dart';
 
 int cantidad = 1;
 
@@ -84,7 +84,7 @@ class com extends State<comidas> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => reserva_desayuno()),
+                                  builder: (context) => DesayunodoPage()),
                             );
                           },
                           color: Colors.green[300],
@@ -142,7 +142,7 @@ class com extends State<comidas> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => reserva_desayuno()),
+                                  builder: (context) => DesayunodoPage()),
                             );
                           },
                           color: Colors.green[300],
@@ -200,7 +200,7 @@ class com extends State<comidas> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => reserva_desayuno()),
+                                  builder: (context) => DesayunodoPage()),
                             );
                           },
                           color: Colors.green[300],

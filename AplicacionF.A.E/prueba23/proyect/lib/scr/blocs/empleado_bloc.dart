@@ -2,65 +2,61 @@ import 'dart:async';
 
 import '../models/empleado.dart';
 
-class Reserva1 {
-  static List<Reserva> _empleadoList = [
-    Reserva(1, "Lunes", 1.5, 1, 0.50, 0, 0.25, 0, 1.5),
-    Reserva(2, "Martes", 2, 1, 0.50, 0, 0.25, 0, 2),
-    Reserva(3, "Miercoles", 1, 1, 0.50, 0, 0.25, 0, 1),
-    Reserva(4, "Jueves", 2.5, 1, 0.50, 0, 0.25, 0, 2.5),
-    Reserva(5, "Viernes", 3.5, 1, 0.50, 0, 0.25, 0, 3.5),
-    Reserva(6, "Sabado", 3, 1, 0.50, 0, 0.25, 0, 3),
-    Reserva(7, "Domingo", 7, 1, 0.50, 0, 0.25, 0, 7),
+class EmpleadoBloc {
+  static List<Empleado> _empleadoList = [
+    Empleado(1, "Lunes", 2, 1, 2),
+    Empleado(2, "Martes", 3, 1, 3),
+    Empleado(3, "Miercoles", 3, 2, 3),
+    Empleado(4, "Jueves", 2.4, 3, 2.4),
   ];
   //Stream Controller
-  final _empleadoListStreamController = StreamController<List<Reserva>>();
-  var _platoIncrementController = StreamController<Reserva>();
-  var _platoDecrementController = StreamController<Reserva>();
-  var _empleadoSalarioAgregarStreamController = StreamController<Reserva>();
+  final _empleadoListStreamController = StreamController<List<Empleado>>();
+  var _empleadoSalarioIncrementStreamController = StreamController<Empleado>();
+  var _empleadoSalarioDecrementStreamController = StreamController<Empleado>();
+  var _empleadoSalarioAgregarStreamController = StreamController<Empleado>();
 
   //getter: Stream and Sinks
-  Stream<List<Reserva>> get empleadoListStream =>
+  Stream<List<Empleado>> get empleadoListStream =>
       _empleadoListStreamController.stream;
-  StreamSink<List<Reserva>> get empleadoListSink =>
+  StreamSink<List<Empleado>> get empleadoListSink =>
       _empleadoListStreamController.sink;
 
-  StreamSink<Reserva> get Incrementplato => _platoIncrementController.sink;
-  StreamSink<Reserva> get Decrementplato => _platoDecrementController.sink;
-  StreamSink<Reserva> get empleadoSalarioAgregar =>
+  StreamSink<Empleado> get empleadoSalarioIncrement =>
+      _empleadoSalarioIncrementStreamController.sink;
+  StreamSink<Empleado> get empleadoSalarioDecrement =>
+      _empleadoSalarioDecrementStreamController.sink;
+  StreamSink<Empleado> get empleadoSalarioAgregar =>
       _empleadoSalarioAgregarStreamController.sink;
 
   //constructor
   EmpleadoBloc() {
     _empleadoListStreamController.add(_empleadoList);
-
-    _platoIncrementController.stream.listen(_incrementplato);
-    _platoDecrementController.stream.listen(_decrementSalario);
-
+    _empleadoSalarioIncrementStreamController.stream.listen(_incrementSalario);
+    _empleadoSalarioDecrementStreamController.stream.listen(_decrementSalario);
     _empleadoSalarioAgregarStreamController.stream.listen(_AgregarEmpleado);
   }
-
   //generar las funciones principales
-  _incrementplato(Reserva objE) {
+  _incrementSalario(Empleado objE) {
     //print(objE.id);
-    double cantidadActual = objE.cantidad_plato;
+    double cantidadActual = objE.cantidad;
     double cantidadIncrement = cantidadActual + 1;
 
-    _empleadoList[objE.id - 1].cantidad_plato =
+    _empleadoList[objE.id - 1].cantidad =
         double.parse((cantidadIncrement).toStringAsFixed(2));
     empleadoListSink.add(_empleadoList);
   }
 
-  _decrementSalario(Reserva objE) {
-    double cantidadActual2 = objE.cantidad_plato;
+  _decrementSalario(Empleado objE) {
+    double cantidadActual2 = objE.cantidad;
     double cantidadDecremento = cantidadActual2 - 1;
 
-    _empleadoList[objE.id - 1].cantidad_plato =
+    _empleadoList[objE.id - 1].cantidad =
         double.parse((cantidadDecremento).toStringAsFixed(2));
     empleadoListSink.add(_empleadoList);
   }
 
   // ignore: non_constant_identifier_names
-  _AgregarEmpleado(Reserva objE) {
+  _AgregarEmpleado(Empleado objE) {
     objE.id = _empleadoList.length - 1;
     _empleadoList.add(objE);
     //print(_empleadoList.length);
@@ -69,8 +65,8 @@ class Reserva1 {
 
   void dispose() {
     _empleadoListStreamController.close();
-    _platoDecrementController.close();
-    _platoIncrementController.close();
+    _empleadoSalarioDecrementStreamController.close();
+    _empleadoSalarioIncrementStreamController.close();
     _empleadoSalarioAgregarStreamController.close();
   }
 }

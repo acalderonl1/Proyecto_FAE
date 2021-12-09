@@ -16,6 +16,7 @@ module.exports = function(app) {
     const Usuario = require(path.resolve(__dirname, '../components/usuario/controller.js'))
     const Usuarioreparto = require(path.resolve(__dirname, '../components/usuarioreparto/controller.js'))
     const Usuariorol = require(path.resolve(__dirname, '../components/usuariorol/controller.js'))
+    const Procesos = require(path.resolve(__dirname, '../components/procesos/controller.js'))
     
     /* CRUD COMEDOR */
     app.post('/comedor/create', Comedor.create)
@@ -107,6 +108,14 @@ module.exports = function(app) {
     app.get('/usuariorol/getAll', Usuariorol.findAll)
     app.put('/usuariorol/update/:idusuariorol', Usuariorol.update)
     app.delete('/usuariorol/delete/:idusuariorol', Usuariorol.delete)
+
+    /* RUTAS DE PROCESOS */
+    app.post('/proceso/createUser', Procesos.create)
+    app.get('/usuario/login/:username/:password', Procesos.filter);
+
+
+
+
 
 
     // created user

@@ -1,5 +1,11 @@
 module.exports = (sequelize, Sequelize)=> {
     const Usuariorol = sequelize.define('usuariorol',{
+        idusuariorol: {
+            type: Sequelize.UUID,
+            allowNull: false,
+            primaryKey: true,
+            autoIncrement: true,
+        },
         idusuario: {
             type: Sequelize.INTEGER,
         },

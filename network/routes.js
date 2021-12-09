@@ -7,12 +7,16 @@ module.exports = function(app) {
     const Grado = require(path.resolve(__dirname, '../components/grado/controller.js'))
     const Menu = require(path.resolve(__dirname, '../components/menu/controller.js'))
     const Menudia = require(path.resolve(__dirname, '../components/menudia/controller.js'))
-    const Reparto = require(path.resolve(__dirname, '../components/reparto/controller.js'))
-
-    const Unidade = require(path.resolve(__dirname, '../components/unidad/controller.js'));
     const Persona = require(path.resolve(__dirname, '../components/persona/controller.js'))
+    const Reparto = require(path.resolve(__dirname, '../components/reparto/controller.js'))
+    const Reserva = require(path.resolve(__dirname, '../components/reserva/controller.js'))
+    const Rol = require(path.resolve(__dirname, '../components/rol/controller.js'))
+    const Tiporancho = require(path.resolve(__dirname, '../components/tiporancho/controller.js'))
+    const Unidad = require(path.resolve(__dirname, '../components/unidad/controller.js'));
     const Usuario = require(path.resolve(__dirname, '../components/usuario/controller.js'))
-
+    const Usuarioreparto = require(path.resolve(__dirname, '../components/usuarioreparto/controller.js'))
+    const Usuariorol = require(path.resolve(__dirname, '../components/usuariorol/controller.js'))
+    
     /* CRUD COMEDOR */
     app.post('/comedor/create', Comedor.create)
     app.get('/comedor/get/:idcomedor', Comedor.filter)
@@ -50,20 +54,59 @@ module.exports = function(app) {
     
     /* CRUD REPARTO */
     app.post('/reparto/create', Reparto.create)
-    app.get('/reparto/get/:idpersona', Reparto.filter)
+    app.get('/reparto/get/:idreparto', Reparto.filter)
     app.get('/reparto/getAll', Reparto.findAll)
-    app.put('/reparto/update/:idpersona', Reparto.update)
-    app.delete('/reparto/delete/:idpersona', Reparto.delete)  
+    app.put('/reparto/update/:idreparto', Reparto.update)
+    app.delete('/reparto/delete/:idreparto', Reparto.delete)  
 
+    /* CRUD RESERVA */
+    app.post('/reserva/create', Reserva.create)
+    app.get('/reserva/get/:idreserva', Reserva.filter)
+    app.get('/reserva/getAll', Reserva.findAll)
+    app.put('/reserva/update/:idreserva', Reserva.update)
+    app.delete('/reserva/delete/:idreserva', Reserva.delete) 
 
-    // CRUD UNIDADES   
-    // app.post('/unidades/create', Unidade.create)
+    /* CRUD ROL */
+    app.post('/rol/create', Rol.create)
+    app.get('/rol/get/:idrol', Rol.filter)
+    app.get('/rol/getAll', Rol.findAll)
+    app.put('/rol/update/:idrol', Rol.update)
+    app.delete('/rol/delete/:idrol', Rol.delete) 
 
+    /* CRUD TIPOROL */
+    app.post('/tiporancho/create', Tiporancho.create)
+    app.get('/tiporancho/get/:idtiporancho', Tiporancho.filter)
+    app.get('/tiporancho/getAll', Tiporancho.findAll)
+    app.put('/tiporancho/update/:idtiporancho', Tiporancho.update)
+    app.delete('/tiporancho/delete/:idtiporancho', Tiporancho.delete) 
     
+    /* CRUD UNIDAD */
+    app.post('/unidad/create', Unidad.create)
+    app.get('/unidad/get/:idunidad', Unidad.filter)
+    app.get('/unidad/getAll', Unidad.findAll)
+    app.put('/unidad/update/:idunidad', Unidad.update)
+    app.delete('/unidad/delete/:idunidad', Unidad.delete) 
+    
+    /* CRUD USUARIO */
+    app.post('/usuario/create', Usuario.create)
+    app.get('/usuario/get/:idusuario', Usuario.filter)
+    app.get('/usuario/getAll', Usuario.findAll)
+    app.put('/usuario/update/:idusuario', Usuario.update)
+    app.delete('/usuario/delete/:idusuario', Usuario.delete)
 
-    // CRUD USUARIOS
-    // app.post('/usuarios/create', Usuarios.create)
-    // app.get('/usuarios/getAll', Usuario.findAll)
+    /* CRUD USUARIOREPARTO */
+    app.post('/usuarioreparto/create', Usuarioreparto.create)
+    app.get('/usuarioreparto/get/:idusuarioreparto', Usuarioreparto.filter)
+    app.get('/usuarioreparto/getAll', Usuarioreparto.findAll)
+    app.put('/usuarioreparto/update/:idusuarioreparto', Usuarioreparto.update)
+    app.delete('/usuarioreparto/delete/:idusuarioreparto', Usuarioreparto.delete)
+
+    /* CRUD USUARIOROL */
+    app.post('/usuariorol/create', Usuariorol.create)
+    app.get('/usuariorol/get/:idusuariorol', Usuariorol.filter)
+    app.get('/usuariorol/getAll', Usuariorol.findAll)
+    app.put('/usuariorol/update/:idusuariorol', Usuariorol.update)
+    app.delete('/usuariorol/delete/:idusuariorol', Usuariorol.delete)
 
 
     // created user

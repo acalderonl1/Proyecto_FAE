@@ -1,16 +1,17 @@
 const path = require('path')
 const db = require(path.resolve(__dirname, '../../db.config'))
-const Unidad = db.unidad
+const Usuariorol = db.usuariorol
 
 
 //ingresar datos a la tabla
 exports.create = (req, res) => {
-    Unidad.create({
+    Usuariorol.create({
+        idusuario: req.body.idusuario,
+        idrol: req.body.idrol,
+        estado: req.body.estado,
         utc: req.body.utc,
-        nombre: req.body.nombre,
-        codigo: req.body.codigo  
-    }).then(unidad => {
-        res.json(unidad)
+    }).then(usuariorol => {
+        res.json(usuariorol)
 
     }).catch(err => {
         res.status(500).json({ msg: "error", mensaje: err });
@@ -20,17 +21,17 @@ exports.create = (req, res) => {
 
 //consultar datos por el id
 exports.filter = (req, res) => {
-    const id = req.params.idunidad
+    const id = req.params.idusuariorol
     var filter = {}
-    if (req.params.idunidad > 0) {
+    if (req.params.idusuariorol > 0) {
         filter = {
             where: {
-                idunidad: id
+                idusuariorol: id
             }
         }
     }
-    Unidad.findAll(filter).then(unidad => {
-        res.json(unidad);
+    Usuariorol.findAll(filter).then(rol => {
+        res.json(rol);
     }).catch(err => {
         console.log(err);
         res.status(500).json({
@@ -41,9 +42,9 @@ exports.filter = (req, res) => {
 
 // Consultar todos los datos de la tabla 
 exports.findAll = (req, res) => {
-    Unidad.findAll()
-        .then(unidad => {
-            res.send(unidad);
+    Usuariorol.findAll()
+        .then(usuariorol => {
+            res.send(usuariorol);
         }).catch(err => {
             res.status(500).send({
                 message: err.message || "Some error occurred while retrieving data."
@@ -53,14 +54,15 @@ exports.findAll = (req, res) => {
 
 //Actualizar todos los datos de la tabla
 exports.update = (req, res) => {
-    Unidad.update({
+    Usuariorol.update({
+        idusuario: req.body.idusuario,
+        idrol: req.body.idrol,
+        estado: req.body.estado,
         utc: req.body.utc,
-        nombre: req.body.nombre,
-        codigo: req.body.codigo 
     },
         {
             where: {
-                idunidad: req.params.idunidad,
+                idusuariorol: req.params.idusuariorol,
             }
         })
         .then(() => {
@@ -76,10 +78,10 @@ exports.update = (req, res) => {
 
 //Eliminar un registro de la tabla por id
 exports.delete = (req, res) => {
-    const id = req.params.idunidad;
-    Unidad.destroy({
+    const id = req.params.idusuariorol;
+    Usuariorol.destroy({
         where: {
-             idunidad: id 
+             idusuariorol: id 
             },
     }).then(() => {
         res.status(200).json({

@@ -1,7 +1,10 @@
 module.exports = (sequelize, Sequelize)=> {
     const Reserva = sequelize.define('reserva',{
-        idreserva: {
-            type: Sequelize.INTEGER,
+        idreserva:{
+            type: Sequelize.UUID,
+            allowNull: false,
+            primaryKey: true,
+            autoIncrement: true
         },
         idmenudia: {
             type: Sequelize.INTEGER,

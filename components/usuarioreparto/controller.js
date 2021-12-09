@@ -1,16 +1,16 @@
-const path = require('path')
+const path = require('path');
 const db = require(path.resolve(__dirname, '../../db.config'))
-const Unidad = db.unidad
+const Usuarioreparto = db.usuarioreparto
 
 
 //ingresar datos a la tabla
 exports.create = (req, res) => {
-    Unidad.create({
+    Usuarioreparto.create({
+        idusuario: req.body.idusuario,
+        idreparto: req.body.idreparto,
         utc: req.body.utc,
-        nombre: req.body.nombre,
-        codigo: req.body.codigo  
-    }).then(unidad => {
-        res.json(unidad)
+    }).then(usuarioreparto => {
+        res.json(usuarioreparto)
 
     }).catch(err => {
         res.status(500).json({ msg: "error", mensaje: err });
@@ -20,17 +20,17 @@ exports.create = (req, res) => {
 
 //consultar datos por el id
 exports.filter = (req, res) => {
-    const id = req.params.idunidad
+    const id = req.params.idusuarioreparto;
     var filter = {}
-    if (req.params.idunidad > 0) {
+    if (req.params.idusuarioreparto > 0) {
         filter = {
             where: {
-                idunidad: id
+                idusuarioreparto: id
             }
         }
     }
-    Unidad.findAll(filter).then(unidad => {
-        res.json(unidad);
+    Usuarioreparto.findAll(filter).then(usuarioreparto => {
+        res.json(usuarioreparto);
     }).catch(err => {
         console.log(err);
         res.status(500).json({
@@ -41,9 +41,9 @@ exports.filter = (req, res) => {
 
 // Consultar todos los datos de la tabla 
 exports.findAll = (req, res) => {
-    Unidad.findAll()
-        .then(unidad => {
-            res.send(unidad);
+    Usuarioreparto.findAll()
+        .then(usuarioreparto => {
+            res.send(usuarioreparto);
         }).catch(err => {
             res.status(500).send({
                 message: err.message || "Some error occurred while retrieving data."
@@ -53,14 +53,14 @@ exports.findAll = (req, res) => {
 
 //Actualizar todos los datos de la tabla
 exports.update = (req, res) => {
-    Unidad.update({
+    Usuarioreparto.update({
+        idusuario: req.body.idusuario,
+        idreparto: req.body.idreparto,
         utc: req.body.utc,
-        nombre: req.body.nombre,
-        codigo: req.body.codigo 
     },
         {
             where: {
-                idunidad: req.params.idunidad,
+                idusuarioreparto: req.params.idusuarioreparto,
             }
         })
         .then(() => {
@@ -76,20 +76,20 @@ exports.update = (req, res) => {
 
 //Eliminar un registro de la tabla por id
 exports.delete = (req, res) => {
-    const id = req.params.idunidad;
-    Unidad.destroy({
+    const id = req.params.idusuarioreparto;
+    Usuarioreparto.destroy({
         where: {
-             idunidad: id 
-            },
+            idusuarioreparto: id
+        },
     }).then(() => {
         res.status(200).json({
-             msg: 'Registro eliminado -> Representante cedula = ' + id 
-            });
+            msg: 'Registro eliminado -> Representante cedula = ' + id
+        });
     }).catch(err => {
         console.log(err);
         res.status(500).json(
-            { 
+            {
                 msg: "error", details: err
-        });
+            });
     });
 };

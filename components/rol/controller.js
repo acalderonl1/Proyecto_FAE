@@ -1,16 +1,16 @@
 const path = require('path')
 const db = require(path.resolve(__dirname, '../../db.config'))
-const Unidad = db.unidad
+const Rol = db.rol
 
 
 //ingresar datos a la tabla
 exports.create = (req, res) => {
-    Unidad.create({
-        utc: req.body.utc,
+    Rol.create({
         nombre: req.body.nombre,
-        codigo: req.body.codigo  
-    }).then(unidad => {
-        res.json(unidad)
+        estado: req.body.estado,
+        utc: req.body.utc,
+    }).then(rol => {
+        res.json(rol)
 
     }).catch(err => {
         res.status(500).json({ msg: "error", mensaje: err });
@@ -20,17 +20,17 @@ exports.create = (req, res) => {
 
 //consultar datos por el id
 exports.filter = (req, res) => {
-    const id = req.params.idunidad
+    const id = req.params.idrol
     var filter = {}
-    if (req.params.idunidad > 0) {
+    if (req.params.idrol > 0) {
         filter = {
             where: {
-                idunidad: id
+                idrol: id
             }
         }
     }
-    Unidad.findAll(filter).then(unidad => {
-        res.json(unidad);
+    Rol.findAll(filter).then(rol => {
+        res.json(rol);
     }).catch(err => {
         console.log(err);
         res.status(500).json({
@@ -41,9 +41,9 @@ exports.filter = (req, res) => {
 
 // Consultar todos los datos de la tabla 
 exports.findAll = (req, res) => {
-    Unidad.findAll()
-        .then(unidad => {
-            res.send(unidad);
+    Rol.findAll()
+        .then(rol => {
+            res.send(rol);
         }).catch(err => {
             res.status(500).send({
                 message: err.message || "Some error occurred while retrieving data."
@@ -53,14 +53,14 @@ exports.findAll = (req, res) => {
 
 //Actualizar todos los datos de la tabla
 exports.update = (req, res) => {
-    Unidad.update({
-        utc: req.body.utc,
+    Rol.update({
         nombre: req.body.nombre,
-        codigo: req.body.codigo 
+        estado: req.body.estado,
+        utc: req.body.utc,
     },
         {
             where: {
-                idunidad: req.params.idunidad,
+                idrol: req.params.idrol,
             }
         })
         .then(() => {
@@ -76,10 +76,10 @@ exports.update = (req, res) => {
 
 //Eliminar un registro de la tabla por id
 exports.delete = (req, res) => {
-    const id = req.params.idunidad;
-    Unidad.destroy({
+    const id = req.params.idrol;
+    Rol.destroy({
         where: {
-             idunidad: id 
+             idrol: id 
             },
     }).then(() => {
         res.status(200).json({

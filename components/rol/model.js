@@ -1,5 +1,11 @@
 module.exports = (sequelize, Sequelize)=> {
-    const Tiporancho = sequelize.define('tiporancho',{
+    const Rol = sequelize.define('rol',{
+        idrol: {
+            type: Sequelize.UUID,
+            allowNull: false,
+            primaryKey: true,
+            autoIncrement: true,
+        },
         nombre: {
             type: Sequelize.STRING,
         },
@@ -11,5 +17,5 @@ module.exports = (sequelize, Sequelize)=> {
         }
     },
     { timestamps: false})
-    return Tiporancho
+    return Rol
 }

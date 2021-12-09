@@ -76,7 +76,7 @@ exports.update = (req, res) => {
 
 //Eliminar un registro de la tabla por id
 exports.delete = (req, res) => {
-    const id = req.params.reparto;
+    const id = req.params.idreparto;
     Reparto.destroy({
         where: { idreparto  : id },
     }).then(() => {

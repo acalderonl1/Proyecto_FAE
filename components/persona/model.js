@@ -1,3 +1,5 @@
+const Usuario = require('../usuario/model')
+
 module.exports = (sequelize, Sequelize)=> {
     const Persona = sequelize.define('persona',{
         idpersona: {
@@ -33,7 +35,11 @@ module.exports = (sequelize, Sequelize)=> {
         utc: {
             type: Sequelize.DATE,
         }
+        
     },
     { timestamps: false})
+    
     return Persona
 }
+  
+

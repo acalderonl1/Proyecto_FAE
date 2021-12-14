@@ -3,7 +3,7 @@ select * from persona;
 select * from grado;
 select * from reparto;
 select * from usuario;
-select * from usuarioreparto;
+select * from usuarioreparto; 
 select * from usuariorol;
 select * from rol;
 select * from comedor;
@@ -14,7 +14,7 @@ select * from reserva;
 
 select g.nombrecorto as grado, p.nombres, r.nombre, u.codigo 
 from dar.personas p, dar.repartos r, dar.unidades u, DAR.grados g 
-where p.idreparto = r.idreparto and r.idunidad = u.idunidad and p.idgrado  = g.idgrado 
+where p.idreparto 	= r.idreparto and r.idunidad = u.idunidad and p.idgrado  = g.idgrado 
 
 delete from unidad 
  where idunidad =1;

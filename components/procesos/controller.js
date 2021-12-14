@@ -1,24 +1,17 @@
 const path = require('path')
+const { Op } = require("sequelize");
 const db = require(path.resolve(__dirname, '../../db.config'))
 const Usuario = db.usuario
 const Persona = db.persona
+const Grado = db.grado
 
-
-//ingresar datos a la tabla
+/* INGRESO ENTRE DOS TABLAS */
 exports.create = (req, res) => {
-    Usuario.create({
-        idpersona: req.body.idpersona,
-        username: req.body.username,
-        password: req.body.password,
-        estado: req.body.estado,
-        utc: req.body.utc,
-    }).then(usuario => {
-        res.json(usuario)
-    }).catch(err => {
-        res.status(500).json({ msg: "error", mensaje: err });
-        console.log('mensaje controlado', err)
-    });
-
+    var idPersonP;
+    var username = req.body.username;
+    var password = req.body.password;
+    var estado = req.body.estado;
+    var utc = req.body.utc;
     Persona.create({
         idreparto: req.body.idreparto,
         idgrado: req.body.idgrado,
@@ -31,17 +24,31 @@ exports.create = (req, res) => {
         dni: req.body.dni,
         utc: req.body.utc,
     }).then(persona => {
+        idPersonP = persona.idpersona
+        personaCreate(persona.idpersona, username, password, estado, utc)
         res.json(persona)
+    }
+    )
 
-    }).catch(err => {
-        res.status(500).json({ msg: "error", mensaje: err });
-        console.log('mensaje controlado', err)
-    });
+    function personaCreate(idpersona, username, password, estado, utc) {
+        console.log(idpersona)
+        Usuario.create({
+            idpersona: idpersona,
+            username: username,
+            password: password,
+            estado: estado,
+            utc: utc,
+        }).then({
 
-}
+        }).catch(err => {
+            console.log(err)
+        });
+    }
+};
 
 
-// logging the Users
+
+/* INICIO DE SESION */
 exports.filter = (req, res) => {
     var filter = {}
     filter = {
@@ -81,4 +88,43 @@ exports.filter = (req, res) => {
     })
 }
 
+    /* CONSULTA ENTRE TABLAS */
+exports.consult = (req, res) => {
+    Grado.findAll({
+        attributes: ['nombrecorto'],
+        where: {
+          [Op.and]: [
+            { idgrado: req.params.idgrado }
+          ]
+        }
+      }).then(grado => {
+           res.json(grado) 
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json(
+            {
+                msg: "error", details: err
+            }
+        )
+    })
+
+
+    Persona.findAll({
+        attributes: ['nombres'],
+        where: {
+          [Op.and]: [
+            { idpersona: req.params.idpersona }
+          ]
+        }
+      }).then(persona => {
+            
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json(
+            {
+                msg: "error", details: err
+            }
+        )
+    },
+)}
 

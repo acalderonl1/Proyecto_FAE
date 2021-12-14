@@ -110,11 +110,9 @@ module.exports = function(app) {
     app.delete('/usuariorol/delete/:idusuariorol', Usuariorol.delete)
 
     /* RUTAS DE PROCESOS */
-    app.post('/proceso/createUser', Procesos.create)
-    app.get('/usuario/login/:username/:password', Procesos.filter);
-
-
-
+    app.post('/proceso/create', Procesos.create)
+    app.get('/usuario/login/:username/:password', Procesos.filter)
+    app.get('/usuario/data/:idpersona/:idgrado', Procesos.consult)
 
 
 

@@ -113,7 +113,7 @@ module.exports = function(app) {
     app.post('/proceso/create', Procesos.create)
     app.get('/usuario/login/:username/:password', Procesos.filter)
     app.get('/usuario/data/:idpersona', Procesos.consult)
-    app.get('/usuario/data1/:idpersona', Procesos.prueba)
+    
 
 
 

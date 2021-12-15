@@ -1,9 +1,3 @@
-const path = require('path')
-const Usuario = require('../usuario/model')
-const db = require(path.resolve(__dirname, '../../db.config'))
-
-const Grado = require('../grado/model')
-
 module.exports = (sequelize, Sequelize)=> {
     const Persona = sequelize.define('persona',{
         idpersona: {
@@ -41,17 +35,7 @@ module.exports = (sequelize, Sequelize)=> {
         }
         
     },
-    {timestamps: false});
-    Persona.associate = function(models){
-        Persona.belongsTo(models.Grado, {
-            as: 'idpersona',
-            foreignKey: 'idgrado'
-        });
-    }
-        // Persona.associate = function(models){
-        //     Persona.belongsTo(models.Grado, {foreignKey: 'idgrado', as: 'idgrado'});
-        // }
-    
+    {timestamps: false})
     return Persona
 }
   

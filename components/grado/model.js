@@ -17,14 +17,5 @@ module.exports = (sequelize, Sequelize)=> {
         }
     },
     {timestamps: false})
-    Grado.associate = function(models){
-        Grado.hasMany(models.Persona, 
-        {
-            as: 'idpersona'
-        })
-    }
-    // Grado.associate = function(models){
-    //     Grado.hasMany(models.Persona, {as: 'idpersona'})
-    // }
     return Grado
 }

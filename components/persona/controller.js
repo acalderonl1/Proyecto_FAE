@@ -100,32 +100,3 @@ exports.delete = (req, res) => {
         res.status(500).json({ msg: "error", details: err });
     });
 };
-
-
-
-
-
-
-
-
-
-// //post personas 
-// exports.create = (req, res) => {
-//     Personas.create({
-//         idreparto: req.body.idreparto,
-//         idgrado: req.body.idgrado,
-//         nombres: req.body.nombres,
-//         telefono: req.body.telefono,
-//         correo: req.body.correo,
-//         sexo: req.body.sexo,
-//         dni: req.body.dni,
-//         estado: req.body.estado,
-//         dni: req.body.dni,         
-//     }).then(personas => {
-//         res.json(personas)
-//     }).catch(err => {
-//         res.status(500).json({ msg: "error", mensaje: err });
-//         console.log('mensaje controlado', err)
-//     });
-    
-// };

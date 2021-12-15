@@ -1,9 +1,17 @@
 const path = require('path')
-const { Op } = require("sequelize");
 const db = require(path.resolve(__dirname, '../../db.config'))
 const Usuario = db.usuario
 const Persona = db.persona
 const Grado = db.grado
+
+Persona.hasOne(Grado, {
+    foreignKey: {
+        name: 'idgrado',
+        allowed: false,
+    }
+});
+
+Grado.hasOne(Persona, { foreignKey: 'idgrado' });
 
 /* INGRESO ENTRE DOS TABLAS */
 exports.create = (req, res) => {
@@ -26,7 +34,7 @@ exports.create = (req, res) => {
     }).then(persona => {
         idPersonP = persona.idpersona
         personaCreate(persona.idpersona, username, password, estado, utc)
-        res.json(persona)
+        
     }
     )
 
@@ -39,7 +47,7 @@ exports.create = (req, res) => {
             estado: estado,
             utc: utc,
         }).then({
-
+            include: [res.json(req.body)]
         }).catch(err => {
             console.log(err)
         });
@@ -88,15 +96,15 @@ exports.filter = (req, res) => {
     })
 }
 
-    /* CONSULTA ENTRE TABLAS */
+/* CONSULTA ENTRE TABLAS */
 exports.consult = (req, res) => {
     Persona.findAll({
+        // attributes: ['nombres'],
+        where: { idpersona: req.params.idpersona },
         attributes: ['nombres'],
-        where: {idpersona: req.params.idpersona},
-        attributes: ['idpersona'],
-        include: [{model:Grado, attributes:['nombrecorto']}]
-      }).then(grado => {
-           res.json(grado) 
+        include: [{ model: Grado, attributes: ['nombrecorto'] }]
+    }).then(grado => {
+        res.json(grado)
     }).catch(err => {
         console.log(err);
         res.status(500).json(
@@ -106,43 +114,4 @@ exports.consult = (req, res) => {
         )
     })
 
-
-    // Persona.findAll({
-    //     attributes: ['nombres'],
-    //     where: {
-    //       [Op.and]: [
-    //         { idpersona: req.params.idpersona }
-    //       ]
-    //     }
-    //   }).then(persona => {
-            
-    // }).catch(err => {
-    //     console.log(err);
-    //     res.status(500).json(
-    //         {
-    //             msg: "error", details: err
-    //         }
-    //     )
-    // })
-}
-
-/* PRUEBA DE CONSULTA CON Query */
-exports.prueba = (req, res)=> {
-    Persona.findAll({
-        include: [{
-            model: Persona.Grado,
-            // attributes: ['username'],
-            where: {idpersona: req.params.idpersona}
-            // required: true
-        }]
-      }).then(persona => {
-            res.json(persona);
-    }).catch(err => {
-        console.log(err);
-        res.status(500).json(
-            {
-                msg: "error", details: err
-            }
-        )
-    })    
 }

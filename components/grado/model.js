@@ -16,6 +16,15 @@ module.exports = (sequelize, Sequelize)=> {
             type: Sequelize.DATE,
         }
     },
-    { timestamps: false})
+    {timestamps: false})
+    Grado.associate = function(models){
+        Grado.hasMany(models.Persona, 
+        {
+            as: 'idpersona'
+        })
+    }
+    // Grado.associate = function(models){
+    //     Grado.hasMany(models.Persona, {as: 'idpersona'})
+    // }
     return Grado
 }

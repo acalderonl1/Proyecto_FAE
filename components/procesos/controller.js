@@ -90,13 +90,11 @@ exports.filter = (req, res) => {
 
     /* CONSULTA ENTRE TABLAS */
 exports.consult = (req, res) => {
-    Grado.findAll({
-        attributes: ['nombrecorto'],
-        where: {
-          [Op.and]: [
-            { idgrado: req.params.idgrado }
-          ]
-        }
+    Persona.findAll({
+        attributes: ['nombres'],
+        where: {idpersona: req.params.idpersona},
+        attributes: ['idpersona'],
+        include: [{model:Grado, attributes:['nombrecorto']}]
       }).then(grado => {
            res.json(grado) 
     }).catch(err => {
@@ -109,15 +107,36 @@ exports.consult = (req, res) => {
     })
 
 
-    Persona.findAll({
-        attributes: ['nombres'],
-        where: {
-          [Op.and]: [
-            { idpersona: req.params.idpersona }
-          ]
-        }
-      }).then(persona => {
+    // Persona.findAll({
+    //     attributes: ['nombres'],
+    //     where: {
+    //       [Op.and]: [
+    //         { idpersona: req.params.idpersona }
+    //       ]
+    //     }
+    //   }).then(persona => {
             
+    // }).catch(err => {
+    //     console.log(err);
+    //     res.status(500).json(
+    //         {
+    //             msg: "error", details: err
+    //         }
+    //     )
+    // })
+}
+
+/* PRUEBA DE CONSULTA CON Query */
+exports.prueba = (req, res)=> {
+    Persona.findAll({
+        include: [{
+            model: Persona.Grado,
+            // attributes: ['username'],
+            where: {idpersona: req.params.idpersona}
+            // required: true
+        }]
+      }).then(persona => {
+            res.json(persona);
     }).catch(err => {
         console.log(err);
         res.status(500).json(
@@ -125,6 +144,5 @@ exports.consult = (req, res) => {
                 msg: "error", details: err
             }
         )
-    },
-)}
-
+    })    
+}

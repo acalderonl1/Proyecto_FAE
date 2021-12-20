@@ -25,6 +25,7 @@ const sequelize = new Sequelize(env.database, env.username, env.password, {
   omitNull: true,
 
   // Parámetros predeterminados de la base de datos, parámetros globales
+ 
   define: {
     underscored: false,
     freezeTableName: true,

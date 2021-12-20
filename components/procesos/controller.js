@@ -1,17 +1,82 @@
 const path = require('path')
+const { menudia } = require('../../db.config')
 const db = require(path.resolve(__dirname, '../../db.config'))
 const Usuario = db.usuario
 const Persona = db.persona
 const Grado = db.grado
+const Menu = db.menu
+const Menudia = db.menudia
+const Comedor = db.comedor
+const Tiporancho = db.tiporancho
+const Reserva = db.reserva
 
+/*ASOSIACION DE PER Y GRA*/{
+/* ASOCIACION DE GRADO Y PERSONA */
 Persona.hasOne(Grado, {
-    foreignKey: {
-        name: 'idgrado',
-        allowed: false,
-    }
+    foreignKey: 'idgrado',
+    sourceKey: 'idgrado',
+    targetKey: 'idgrado'
 });
 
-Grado.hasOne(Persona, { foreignKey: 'idgrado' });
+Grado.belongsTo(Persona, {
+    foreignKey: 'idgrado',
+    sourceKey: 'idgrado',
+    targetKey: 'idgrado'
+});
+}
+
+/* ASOSIACIONES DE RESERVAS */{
+    Reserva.hasMany(Menudia, {
+        foreignKey: 'idmenudia',
+        sourceKey: 'idmenudia',
+        targetKey: 'idmenudia'
+    });
+
+    Menudia.hasMany(Reserva, {
+        foreignKey: 'idmenudia',
+        sourceKey: 'idmenudia',
+        targetKey: 'idmenudia'
+    });
+
+    Menudia.hasMany(Menu, {
+        foreignKey: 'idmenu',
+        sourceKey: 'idmenu',
+        targetKey: 'idmenu'
+    });
+
+    Menudia.hasMany(Comedor, {
+        foreignKey: 'idcomedor',
+        sourceKey: 'idcomedor',
+        targetKey: 'idcomedor'
+    });
+
+    Menudia.hasMany(Tiporancho, {
+        foreignKey: 'idtiporancho',
+        sourceKey: 'idtiporancho',
+        targetKey: 'idtiporancho'
+
+    });
+
+    Comedor.hasMany(Menudia, {
+        foreignKey: 'idcomedor',
+        sourceKey: 'idcomedor',
+        targetKey: 'idcomedor'
+
+    });
+
+    Menu.hasOne(Menudia, {
+        foreignKey: 'idmenu',
+        sourceKey: 'idmenu',
+        targetKey: 'idmenu'
+    });
+
+    Tiporancho.hasOne(Menudia, {
+        foreignKey: 'idtiporancho',
+        sourceKey: 'idtiporancho',
+        targetKey: 'idtiporancho'
+    });
+}
+
 
 /* INGRESO ENTRE DOS TABLAS */
 exports.create = (req, res) => {
@@ -34,7 +99,7 @@ exports.create = (req, res) => {
     }).then(persona => {
         idPersonP = persona.idpersona
         personaCreate(persona.idpersona, username, password, estado, utc)
-        
+
     }
     )
 
@@ -53,7 +118,6 @@ exports.create = (req, res) => {
         });
     }
 };
-
 
 
 /* INICIO DE SESION */
@@ -96,13 +160,15 @@ exports.filter = (req, res) => {
     })
 }
 
-/* CONSULTA ENTRE TABLAS */
-exports.consult = (req, res) => {
+
+/* CONSULTA ENTRE TABLAS ENTRE GRADO Y PERSONA*/
+exports.consultGradoPersona = (req, res) => {
     Persona.findAll({
-        // attributes: ['nombres'],
         where: { idpersona: req.params.idpersona },
-        attributes: ['nombres'],
-        include: [{ model: Grado, attributes: ['nombrecorto'] }]
+        attributes: ['idpersona', 'nombres'],
+        include: [{
+            model: Grado, attributes: ['idgrado', 'nombrecorto']
+        }]
     }).then(grado => {
         res.json(grado)
     }).catch(err => {
@@ -114,4 +180,34 @@ exports.consult = (req, res) => {
         )
     })
 
+}
+
+
+/* CONSULTA ENTRE TABLAS PARA OBTENER TODAS LAS RESERVAS DE UNA PERSONA*/
+exports.consultReserva = (req, res) => {
+    Reserva.findAll({
+        where: {
+            idpersona: req.params.idpersona
+        },
+        include: [{
+            model: Menudia, attributes: ['idmenudia', 'idmenu', 'idtiporancho', 'dia', 'precio'],
+            include: [{
+                model: Menu, attributes: ['idmenu', 'descripcion'],
+            },
+            { model: Tiporancho, attributes: ['idtiporancho', 'nombre'] },
+            {
+                model: Comedor, attributes: ['nombre']
+            }],
+        }
+        ],
+    }).then(reserva => {
+        res.json(reserva)
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json(
+            {
+                msg: "error", details: err
+            }
+        )
+    })
 }

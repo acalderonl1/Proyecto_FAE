@@ -15,8 +15,8 @@ module.exports = (sequelize, Sequelize)=> {
         idcomedor: {
             type: Sequelize.INTEGER,
         },
-        fecha: {
-            type: Sequelize.DATE,
+        dia: {
+            type: Sequelize.STRING,
         },
         precio:{
             type: Sequelize.DOUBLE,

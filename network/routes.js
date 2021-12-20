@@ -112,7 +112,9 @@ module.exports = function(app) {
     /* RUTAS DE PROCESOS */
     app.post('/proceso/create', Procesos.create)
     app.get('/usuario/login/:username/:password', Procesos.filter)
-    app.get('/usuario/data/:idpersona', Procesos.consult)
+    app.get('/usuario/dataGradoPersona/:idpersona', Procesos.consultGradoPersona)
+    app.get('/usuario/dataReserva/:idpersona', Procesos.consultReserva)
+
     
 
 

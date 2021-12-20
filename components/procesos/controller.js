@@ -9,20 +9,33 @@ const Menudia = db.menudia
 const Comedor = db.comedor
 const Tiporancho = db.tiporancho
 const Reserva = db.reserva
+const Reparto = db.reparto
 
 /*ASOSIACION DE PER Y GRA*/{
-/* ASOCIACION DE GRADO Y PERSONA */
-Persona.hasOne(Grado, {
-    foreignKey: 'idgrado',
-    sourceKey: 'idgrado',
-    targetKey: 'idgrado'
-});
+    /* ASOCIACION DE GRADO Y PERSONA */
+    Persona.hasOne(Grado, {
+        foreignKey: 'idgrado',
+        sourceKey: 'idgrado',
+        targetKey: 'idgrado'
+    });
 
-Grado.belongsTo(Persona, {
-    foreignKey: 'idgrado',
-    sourceKey: 'idgrado',
-    targetKey: 'idgrado'
-});
+    Grado.belongsTo(Persona, {
+        foreignKey: 'idgrado',
+        sourceKey: 'idgrado',
+        targetKey: 'idgrado'
+    });
+
+    Persona.hasOne(Reparto, {
+        foreignKey: 'idreparto',
+        sourceKey: 'idreparto',
+        targetKey: 'idreparto'
+    })
+
+    Reparto.hasMany(Persona, {
+        foreignKey: 'idreparto',
+        sourceKey: 'idreparto',
+        targetKey: 'idreparto'
+    })
 }
 
 /* ASOSIACIONES DE RESERVAS */{
@@ -165,10 +178,11 @@ exports.filter = (req, res) => {
 exports.consultGradoPersona = (req, res) => {
     Persona.findAll({
         where: { idpersona: req.params.idpersona },
-        attributes: ['idpersona', 'nombres'],
+        // attributes: ['idpersona', 'nombres'],
         include: [{
-            model: Grado, attributes: ['idgrado', 'nombrecorto']
-        }]
+            model: Grado,
+        },{model: Reparto}],
+        
     }).then(grado => {
         res.json(grado)
     }).catch(err => {

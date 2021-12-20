@@ -12,7 +12,6 @@ const Reserva = db.reserva
 const Reparto = db.reparto
 
 /*ASOSIACION DE PER Y GRA*/{
-    /* ASOCIACION DE GRADO Y PERSONA */
     Persona.hasOne(Grado, {
         foreignKey: 'idgrado',
         sourceKey: 'idgrado',
@@ -112,7 +111,7 @@ exports.create = (req, res) => {
     }).then(persona => {
         idPersonP = persona.idpersona
         personaCreate(persona.idpersona, username, password, estado, utc)
-
+        res.json(persona)
     }
     )
 
@@ -125,7 +124,7 @@ exports.create = (req, res) => {
             estado: estado,
             utc: utc,
         }).then({
-            include: [res.json(req.body)]
+            
         }).catch(err => {
             console.log(err)
         });
@@ -203,12 +202,13 @@ exports.consultReserva = (req, res) => {
         where: {
             idpersona: req.params.idpersona
         },
+        attributes: ['cantidad'],
         include: [{
-            model: Menudia, attributes: ['idmenudia', 'idmenu', 'idtiporancho', 'dia', 'precio'],
+            model: Menudia, attributes: ['dia', 'precio'],
             include: [{
-                model: Menu, attributes: ['idmenu', 'descripcion'],
+                model: Menu, attributes: ['descripcion'],
             },
-            { model: Tiporancho, attributes: ['idtiporancho', 'nombre'] },
+            { model: Tiporancho, attributes: ['nombre'] },
             {
                 model: Comedor, attributes: ['nombre']
             }],

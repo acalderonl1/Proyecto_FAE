@@ -1,0 +1,89 @@
+import 'dart:convert' as convert;
+
+import 'package:http/http.dart' as http;
+
+import 'package:flutter/material.dart';
+import 'package:rancho_ala22/scr/models/grado.dart';
+
+class ListaCompras extends StatefulWidget {
+  const ListaCompras({Key key, this.idcliente}) : super(key: key);
+  final String idcliente;
+
+  @override
+  _ListaComprasState createState() => _ListaComprasState();
+}
+
+class Grado {
+  final String nombrecorto;
+
+  Grado({this.nombrecorto});
+
+  factory Grado.fromJson(Map<String, dynamic> json) {
+    return Grado(nombrecorto: json['nombrecorto']);
+  }
+}
+
+class Persona {
+  String nombres;
+  Grado grado;
+
+  Persona({this.nombres, this.grado});
+
+  factory Persona.fromJson(Map<String, dynamic> parsedJson) {
+    return Persona(
+        nombres: parsedJson['nombres'],
+        grado: Grado.fromJson(parsedJson['grado']));
+  }
+}
+
+List<Persona> persona_grado;
+
+class API {
+  static Future<void> getAlbums() async {
+    http.Response response = await http
+        .get(Uri.parse('http://192.168.10.110:3000/usuario/data/1'), //url
+            headers: {"Accept": "application/json"});
+    if (response.statusCode == 200) {
+      persona_grado = (convert.json.decode(response.body) as List)
+          .map((i) => Persona.fromJson(i))
+          .toList();
+      print('${persona_grado[0].grado.nombrecorto}' +
+          '\t' +
+          '${persona_grado[0].nombres}');
+    } else {
+      throw Exception('Failed to load campaigns');
+    }
+  }
+}
+
+class _ListaComprasState extends State<ListaCompras> {
+  @override
+  void initState() {
+    API.getAlbums();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Persona"),
+        ),
+        body: new ListView.builder(
+            itemCount: persona_grado == null ? 0 : persona_grado.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Card(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      "Id compra: " +
+                          persona_grado[index].nombres +
+                          "     Cédula: " +
+                          persona_grado[index].grado.nombrecorto,
+                    )
+                  ],
+                ),
+              );
+            }));
+  }
+}

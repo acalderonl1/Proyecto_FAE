@@ -6,20 +6,20 @@ import 'package:rancho_ala22/perfil/perfil_user.dart';
 import 'package:flutter/material.dart';
 import 'package:rancho_ala22/reservas/serializacion/serializacion.dart';
 
-class ListaCompras extends StatefulWidget {
-  const ListaCompras({Key key, this.idcliente}) : super(key: key);
+class ListaFactura extends StatefulWidget {
+  const ListaFactura({Key key, this.idcliente}) : super(key: key);
   final int idcliente;
   @override
-  _ListaComprasState createState() => _ListaComprasState();
+  _ListaFactura createState() => _ListaFactura();
 }
 
 double total;
 
-class _ListaComprasState extends State<ListaCompras> {
+class _ListaFactura extends State<ListaFactura> {
   Future<List<Reserva>> getDataReserva(idcliente) async {
     http.Response response = await http.get(
         Uri.parse(
-            'http://192.168.68.103:3000/usuario/datareserva/$idcliente'), //url
+            'http://192.168.68.103:3000/usuario/datafactura/$idcliente'), //url
         headers: {"Accept": "application/json"});
     return await Future.delayed(Duration(seconds: 2), () {
       List<dynamic> data = convert.jsonDecode(response.body);
@@ -30,7 +30,7 @@ class _ListaComprasState extends State<ListaCompras> {
 
   @override
   void initState() {
-    print(widget.idcliente);
+    print(widget.idcliente.hashCode);
     print(widget.idcliente.toString());
 
     this.getDataReserva(widget.idcliente);
@@ -45,7 +45,7 @@ class _ListaComprasState extends State<ListaCompras> {
           toolbarHeight: 80,
           centerTitle: true,
           title: Text(
-            'Reservas',
+            'Comprobante de pago',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           actions: <Widget>[
@@ -86,26 +86,17 @@ class _ListaComprasState extends State<ListaCompras> {
                           key: Key("$index"),
                           title: Text(userData.cantidad ?? ""),
                         );*/
-                        var cool;
-                        String sms;
-                        if (userData.estado == 'P') {
-                          cool = Colors.red;
-                          sms = "Pendiente de pago";
-                        } else {
-                          cool = Colors.grey[100];
-                          sms = "";
-                        }
-                        ;
+
                         return Card(
-                            color: cool,
+                            color: Colors.grey[300],
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15)),
                             margin: EdgeInsets.all(17),
                             elevation: 20,
                             child: Container(
-                                margin: EdgeInsets.only(top: 25),
+                                margin: EdgeInsets.only(top: 5),
                                 padding: EdgeInsets.only(
-                                  top: 25,
+                                  top: 5,
                                   left: 40,
                                   right: 20,
                                 ),
@@ -114,9 +105,42 @@ class _ListaComprasState extends State<ListaCompras> {
                                 child: Column(children: <Widget>[
                                   Center(
                                       child: Column(children: [
+                                    Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          IconButton(
+                                            alignment: Alignment.bottomLeft,
+                                            icon: new Icon(
+                                              Icons.delete,
+                                              color: Colors.red,
+                                              size: 40,
+                                            ),
+                                            onPressed: () async {
+                                              var id = userData.idreserva;
+                                              print(userData.idreserva);
+                                              var url = Uri.parse(
+                                                  'http://192.168.68.103:3000/reserva/update/$id');
+                                              // Await the http get response, then decode the json-formatted response.
+                                              var response = await http.put(url,
+                                                  body: {'estado': "E"});
+                                              this.getDataReserva(
+                                                  widget.idcliente);
+
+                                              Fluttertoast.showToast(
+                                                  msg: "Reserva eliminada",
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.CENTER,
+                                                  timeInSecForIosWeb: 1);
+                                              if (response.statusCode == 200) {
+                                                this.setState(() {});
+                                              }
+                                            },
+                                          ),
+                                        ]),
                                     Text(
-                                      sms +
-                                          " Reserva # " +
+                                      " Reserva # " +
                                           userData.idreserva.toString(),
                                       style: TextStyle(
                                         fontSize: 20,
@@ -359,21 +383,6 @@ class _ListaComprasState extends State<ListaCompras> {
                                       ],
                                     ),
                                     SizedBox(height: 25),
-                                    /*    new Column(
-                                children: userData.menudia.map((Menudia_) {
-                                  return new Column(
-                                    children: [
-                                      new Text(Menudia_.dia),
-                                      new Column(
-                                        children: Menudia_.comedor
-                                            .map((modelComedor) {
-                                          return new Text(modelComedor.nombre);
-                                        }).toList(),
-                                      )
-                                    ],
-                                  );
-                                }).toList(),
-                              )*/
                                   ])),
                                   SizedBox(height: 35)
                                 ])));

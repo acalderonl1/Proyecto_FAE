@@ -6,11 +6,9 @@ import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import 'package:rancho_ala22/perfil/serializacionperfil.dart';
 
-class Perfil_user extends StatefulWidget {
-  const Perfil_user({Key key, this.idcliente}) : super(key: key);
-  final int idcliente;
+class Perfil2 extends StatefulWidget {
   @override
-  Perfil_ createState() => Perfil_();
+  _MyAppState createState() => _MyAppState();
 }
 
 String Username1;
@@ -22,12 +20,13 @@ String NombreReparto;
 String NombreGrado;
 
 //Color(0xFF242E56)
-class Perfil_ extends State<Perfil_user> {
+class _MyAppState extends State<Perfil2> {
   List<Usuario> persona_Usuario;
-  Future<String> getUsuario(idcliente) async {
+
+  Future<String> getUsuario() async {
     http.Response response = await http.get(
         Uri.parse(
-            'http://192.168.68.103:3000/usuario/dataperfilpersona/$idcliente'), //url
+            'http://192.168.68.103:3000/usuario/dataperfilpersona/1'), //url
         headers: {"Accept": "application/json"});
     if (response.statusCode == 200) {
       this.setState(() {
@@ -49,7 +48,7 @@ class Perfil_ extends State<Perfil_user> {
 
   @override
   void initState() {
-    this.getUsuario(widget.idcliente);
+    this.getUsuario();
   }
 
   @override
@@ -79,7 +78,7 @@ class Perfil_ extends State<Perfil_user> {
             ),
           ],
         ),
-        drawer: MenuLateral(idcliente: widget.idcliente),
+        drawer: MenuLateral(),
         backgroundColor: Color(0xFF242E56),
         body: SingleChildScrollView(
           child: Column(
@@ -322,13 +321,6 @@ class Perfil_ extends State<Perfil_user> {
               ),
             ],
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          backgroundColor: Colors.red,
-          child: const Icon(Icons.reply_sharp, size: 30),
         ),
       ),
     );

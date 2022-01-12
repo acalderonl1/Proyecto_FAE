@@ -1,5 +1,6 @@
 const env = {
     database: 'FAE',
+    schema: 'dar',
     username: 'postgres',
     password: '123',
     host: 'localhost',

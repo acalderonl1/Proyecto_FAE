@@ -1,27 +1,99 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:rancho_ala22/Animation/FadeAnimation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import '../main.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
+import 'package:rancho_ala22/scr/models/grado.dart';
+import 'package:rancho_ala22/scr/models/reparto.dart';
+import 'package:rancho_ala22/scr/models/sexo.dart';
+
+TextEditingController usernameRegistro = TextEditingController();
+TextEditingController contrasenaRegistro = TextEditingController();
 
 TextEditingController nombreRegistro = TextEditingController();
-TextEditingController apellidosRegistro = TextEditingController();
-TextEditingController gradoRegistro = TextEditingController();
-TextEditingController unidadRegistro = TextEditingController();
-TextEditingController cedulaRegistro = TextEditingController();
-TextEditingController correoRegistro = TextEditingController();
-TextEditingController codigoRegistro = TextEditingController();
+TextEditingController telefonoRegistro = TextEditingController();
 
-TextEditingController contrasenaRegistro = TextEditingController();
+TextEditingController correoRegistro = TextEditingController();
+TextEditingController sexoRegistro = TextEditingController();
+TextEditingController cedulaRegistro = TextEditingController();
+
+TextEditingController codigoRegistro = TextEditingController();
 
 class Registro extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
+String _validatorPassword(String value) {
+  if (!_hasMinLenght(value)) {
+    return 'Contraseña debil';
+  }
+}
+
+bool _hasMinLenght(String value) {
+  return value.isNotEmpty && value.length >= 8;
+}
+
 class _HomePageState extends State<Registro> {
   final _formKey = GlobalKey<FormState>();
+  String _mySelection;
+
+  final RegExp phoneRegex = RegExp(r'^[0]\d{9}$');
+  final RegExp emailRegex = RegExp(
+      r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
+
+  static List<Sexo> Lista_sexo = [
+    Sexo("M", "Masculino"),
+    Sexo("F", "Femenino"),
+  ];
+
+  //Lista de grados
+  static List<Grado> Lista_grados = [
+    Grado("1", "SRPN"),
+    Grado("2", "TBRP"),
+    Grado("3", "Soldado"),
+    Grado("4", "Cabo Segundo"),
+    Grado("5", "Cabo Primero"),
+    Grado("6", "Sargento Segundo"),
+    Grado("7", "Sargento Primero"),
+    Grado("8", "Sub Oficial Segundo"),
+    Grado("9", "Sub Oficial Primero"),
+    Grado("10", "Sub Oficial Mayor"),
+    Grado("11", "Sub Teniente"),
+    Grado("12", "TNTE"),
+    Grado("13", "Capitan"),
+    Grado("14", "Mayor"),
+    Grado("15", "Teniente Coronel"),
+    Grado("16", "Coronel"),
+    Grado("17", "General"),
+  ];
+  String grado_registro;
+  String sexo_registro;
+
+  List data = List(); //edited line
+
+  Future<String> getSWData() async {
+    http.Response response = await http
+        .get(Uri.parse('http://192.168.68.103:3000/reparto/getAll'), //url
+            headers: {"Accept": "application/json"});
+    var resBody = convert.json.decode(response.body);
+    setState(() {
+      data = resBody;
+    });
+
+    print(resBody);
+
+    return "Sucess";
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    this.getSWData();
+  }
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -143,7 +215,7 @@ class _HomePageState extends State<Registro> {
                           ),
                           //Ingreso del Apellido
                           Text(
-                            'Apellidos',
+                            'Username',
                             textAlign: TextAlign.end,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 20),
@@ -175,14 +247,14 @@ class _HomePageState extends State<Registro> {
                                   child: TextFormField(
                                     decoration: InputDecoration(
                                       border: InputBorder.none,
-                                      hintText: "Ingrese apellidos",
+                                      hintText: "Ingrese Username",
                                       hintStyle: TextStyle(color: Colors.grey),
                                       prefixIcon: Icon(
                                         Icons.person,
                                         color: Colors.black,
                                       ),
                                     ),
-                                    controller: apellidosRegistro,
+                                    controller: usernameRegistro,
                                     validator: (value) {
                                       if (value.isEmpty) {
                                         return 'Por favor ingrese Apellido';
@@ -206,7 +278,6 @@ class _HomePageState extends State<Registro> {
                           SizedBox(
                             height: 15,
                           ),
-
                           FadeAnimation(
                               1.7,
                               Container(
@@ -227,29 +298,34 @@ class _HomePageState extends State<Registro> {
                                       border: Border(
                                           bottom: BorderSide(
                                               color: Colors.grey[200]))),
-                                  child: TextField(
-                                    decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: "Ingrese su Grado",
-                                        hintStyle:
-                                            TextStyle(color: Colors.grey)),
-                                    controller: gradoRegistro,
+                                  child: DropdownButton(
+                                    hint: Text(
+                                        'Selecciona tu Grado'), // Not necessary for Option 1
+                                    value: grado_registro,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        grado_registro = newValue;
+
+                                        print(grado_registro);
+                                      });
+                                    },
+                                    items: Lista_grados.map((gradoLista) {
+                                      return new DropdownMenuItem<String>(
+                                        child: new Text(gradoLista.grado),
+                                        value: gradoLista.id,
+                                      );
+                                    }).toList(),
                                   ),
                                 ),
-                                /*  ],
-                                          ),*/
-                                /*  ),
-                                      ],
-                                    ),*/
                               )),
-                          // Fin del ingreso Grado
+
                           SizedBox(
                             height: 15,
                           ),
 
                           //Ingreso del Unidad
                           Text(
-                            'Unidad',
+                            'Reparto',
                             textAlign: TextAlign.end,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 20),
@@ -278,19 +354,20 @@ class _HomePageState extends State<Registro> {
                                       border: Border(
                                           bottom: BorderSide(
                                               color: Colors.grey[200]))),
-                                  child: TextFormField(
-                                    decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: "Ingrese su Unidad",
-                                        hintStyle:
-                                            TextStyle(color: Colors.grey)),
-                                    controller: unidadRegistro,
-                                    validator: (value) {
-                                      if (value.isEmpty) {
-                                        return 'Por favor ingrese Unidad';
-                                      }
-                                      return null;
+                                  child: DropdownButton(
+                                    items: data.map((item) {
+                                      return new DropdownMenuItem(
+                                        child: new Text(item['nombre']),
+                                        value: item['idreparto'].toString(),
+                                      );
+                                    }).toList(),
+                                    onChanged: (newVal) {
+                                      setState(() {
+                                        _mySelection = newVal;
+                                        print(_mySelection);
+                                      });
                                     },
+                                    value: _mySelection,
                                   ),
                                 ),
                               )),
@@ -299,7 +376,58 @@ class _HomePageState extends State<Registro> {
                           SizedBox(
                             height: 15,
                           ),
+                          Text(
+                            'Sexo',
+                            textAlign: TextAlign.end,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          FadeAnimation(
+                              1.7,
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color:
+                                            Color.fromRGBO(196, 135, 198, .3),
+                                        blurRadius: 20,
+                                        offset: Offset(0, 10),
+                                      )
+                                    ]),
+                                child: Container(
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              color: Colors.grey[200]))),
+                                  child: DropdownButton(
+                                    hint: Text(
+                                        'Selecciona tu Sexo'), // Not necessary for Option 1
+                                    value: sexo_registro,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        sexo_registro = newValue;
+                                        print(sexo_registro);
+                                      });
+                                    },
+                                    items: Lista_sexo.map((sexoLista) {
+                                      return new DropdownMenuItem<String>(
+                                        child: new Text(sexoLista.sexo),
+                                        value: sexoLista.idsexo,
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              )),
 
+                          SizedBox(
+                            height: 15,
+                          ),
                           //Ingreso de Cedula
                           Text(
                             'Cedula',
@@ -343,9 +471,14 @@ class _HomePageState extends State<Registro> {
                                       ),
                                     ),
                                     controller: cedulaRegistro,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'^[0-9]*$')),
+                                      LengthLimitingTextInputFormatter(10)
+                                    ],
                                     validator: (value) {
-                                      if (value.isEmpty) {
-                                        return 'Por favor ingrese Cedula';
+                                      if (!phoneRegex.hasMatch(value)) {
+                                        return 'Por favor ingrese cedula valida';
                                       }
                                       return null;
                                     },
@@ -356,7 +489,65 @@ class _HomePageState extends State<Registro> {
                           SizedBox(
                             height: 15,
                           ),
-
+                          Text(
+                            'Telefono',
+                            textAlign: TextAlign.end,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          FadeAnimation(
+                              1.7,
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color:
+                                            Color.fromRGBO(196, 135, 198, .3),
+                                        blurRadius: 20,
+                                        offset: Offset(0, 10),
+                                      )
+                                    ]),
+                                child: Container(
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              color: Colors.grey[200]))),
+                                  child: TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: "Ingrese su Telefono",
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                      prefixIcon: Icon(
+                                        Icons.person,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    controller: telefonoRegistro,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'^[0-9]*$')),
+                                      LengthLimitingTextInputFormatter(10)
+                                    ],
+                                    validator: (value) {
+                                      if (!phoneRegex.hasMatch(value)) {
+                                        return 'Por favor ingrese telefono valida';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                              )),
+                          // Fin del ingreso Cedula
+                          SizedBox(
+                            height: 15,
+                          ),
                           //Ingreso del Correo
                           Text(
                             'Correo',
@@ -400,8 +591,8 @@ class _HomePageState extends State<Registro> {
                                     ),
                                     controller: correoRegistro,
                                     validator: (value) {
-                                      if (value.isEmpty) {
-                                        return 'Por favor ingrese Correo';
+                                      if (!emailRegex.hasMatch(value)) {
+                                        return 'Email no valido';
                                       }
                                       return null;
                                     },
@@ -412,61 +603,6 @@ class _HomePageState extends State<Registro> {
                           SizedBox(
                             height: 15,
                           ),
-
-                          //Ingreso del Codigo
-                          Text(
-                            'Codigo',
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-
-                          FadeAnimation(
-                              1.7,
-                              Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color:
-                                            Color.fromRGBO(196, 135, 198, .3),
-                                        blurRadius: 20,
-                                        offset: Offset(0, 10),
-                                      )
-                                    ]),
-                                child: Container(
-                                  padding: EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      border: Border(
-                                          bottom: BorderSide(
-                                              color: Colors.grey[200]))),
-                                  child: TextFormField(
-                                    keyboardType: TextInputType.number,
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: "Ingrese Codigo",
-                                      hintStyle: TextStyle(color: Colors.grey),
-                                      prefixIcon: Icon(
-                                        Icons.code_sharp,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    controller: codigoRegistro,
-                                    validator: (value) {
-                                      if (value.isEmpty) {
-                                        return 'Por favor ingrese Codigo';
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                ),
-                              )),
-                          // Fin del ingreso Codigo
-
                           //Ingreso Contraseña
                           SizedBox(
                             height: 20,
@@ -482,23 +618,22 @@ class _HomePageState extends State<Registro> {
                           ),
 
                           FadeAnimation(
-                              1.7,
-                              Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color:
-                                            Color.fromRGBO(196, 135, 198, .3),
-                                        blurRadius: 20,
-                                        offset: Offset(0, 10),
-                                      )
-                                    ]),
-                                child: Container(
-                                  alignment: Alignment.centerLeft,
-                                  height: 60.0,
-                                  child: TextFormField(
+                            1.7,
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color.fromRGBO(196, 135, 198, .3),
+                                      blurRadius: 20,
+                                      offset: Offset(0, 10),
+                                    )
+                                  ]),
+                              child: Container(
+                                alignment: Alignment.centerLeft,
+                                height: 60.0,
+                                child: TextFormField(
                                     obscureText: true,
                                     style: TextStyle(
                                       fontFamily: 'OpenSans',
@@ -514,21 +649,16 @@ class _HomePageState extends State<Registro> {
                                       hintText: 'Ingrese contraseña',
                                     ),
                                     controller: contrasenaRegistro,
-                                    validator: (value) {
-                                      if (value.isEmpty) {
-                                        return 'Por favor ingrese Contraseña';
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                ),
-                              )),
+                                    validator: (value) =>
+                                        _validatorPassword(value)),
+                              ),
+                            ),
+                          ),
                           //Fin Ingreso Contraseña
 
                           SizedBox(
                             height: 30,
                           ),
-
                           /* BotonRegistro */
 
                           FadeAnimation(
@@ -537,58 +667,62 @@ class _HomePageState extends State<Registro> {
                                 onTap: () async {
                                   if (_formKey.currentState.validate()) {
                                     var url = Uri.parse(
-                                        'http://192.168.10.110:3000/usuario/create');
+                                        'http://192.168.68.103:3000/proceso/create');
                                     print(url);
-                                    var response = await http.post(url, body: {
-                                      'grado_id': gradoRegistro.text,
-                                      'rol_id': gradoRegistro.text,
-                                      'nombre': nombreRegistro.text,
-                                      'apellido': apellidosRegistro.text,
-                                      'cedula': cedulaRegistro.text,
-                                      'unidad': unidadRegistro.text,
+                                    Map data = {
+                                      'username': usernameRegistro.text,
+                                      'password': contrasenaRegistro.text,
+                                      'estado': "A",
+                                      'idreparto': int.parse(_mySelection),
+                                      'idgrado': int.parse(grado_registro),
+                                      'nombres': nombreRegistro.text,
+                                      'telefono': telefonoRegistro.text,
                                       'correo': correoRegistro.text,
-                                      'contrasena': contrasenaRegistro.text,
+                                      'sexo': sexo_registro,
+                                      'dni': cedulaRegistro.text,
+                                    };
+                                    var body2 = convert.json.encode(data);
+                                    var response = await http.post(url,
+                                        headers: {
+                                          "Content-Type": "application/json"
+                                        },
+                                        body: body2);
+                                    //     'codigo': codigoRegistro.text,
 
-                                      //     'codigo': codigoRegistro.text,
-                                    });
                                     if (response.statusCode == 200) {
                                       var jsonResponse =
                                           convert.jsonDecode(response.body)
                                               as Map<String, dynamic>;
-                                      var isUser = jsonResponse['cedula'];
+                                      var isUser = jsonResponse['dni'];
+                                      print(isUser);
                                       if (isUser == cedulaRegistro.text) {
-                                        print('Error de registro');
+                                        print('Usuario registrado');
                                         Fluttertoast.showToast(
-                                            msg: "Error de registro",
+                                            msg: "Usuario registrado",
                                             toastLength: Toast.LENGTH_SHORT,
                                             gravity: ToastGravity.CENTER,
                                             timeInSecForIosWeb: 1);
-                                        cedulaRegistro.clear();
-                                        nombreRegistro.clear();
-                                        apellidosRegistro.clear();
+                                        usernameRegistro.clear();
                                         contrasenaRegistro.clear();
-                                        gradoRegistro.clear();
-                                        unidadRegistro.clear();
+                                        nombreRegistro.clear();
+                                        telefonoRegistro.clear();
                                         correoRegistro.clear();
-                                        codigoRegistro.clear();
-                                        //Retroceder
+                                        cedulaRegistro.clear();
                                         Navigator.pop(context);
                                       } else {
-                                        print('Registro con éxitoo');
+                                        print('Error registro');
                                         Fluttertoast.showToast(
-                                            msg: "Registro con éxito " +
+                                            msg: "Error registro " +
                                                 nombreRegistro.text,
                                             toastLength: Toast.LENGTH_SHORT,
                                             gravity: ToastGravity.CENTER,
                                             timeInSecForIosWeb: 1);
-                                        cedulaRegistro.clear();
-                                        nombreRegistro.clear();
-                                        apellidosRegistro.clear();
+                                        usernameRegistro.clear();
                                         contrasenaRegistro.clear();
-                                        gradoRegistro.clear();
-                                        unidadRegistro.clear();
+                                        nombreRegistro.clear();
+                                        telefonoRegistro.clear();
                                         correoRegistro.clear();
-                                        codigoRegistro.clear();
+                                        cedulaRegistro.clear();
                                       }
                                     } else {
                                       print(
@@ -605,48 +739,18 @@ class _HomePageState extends State<Registro> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      "Registrar",
-                                      style: TextStyle(color: Colors.white),
+                                      "Crear cuenta",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 17),
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
                                 ),
                               )),
-
+                          SizedBox(
+                            height: 70,
+                          ),
                           //fin Boton Registro
-                          SizedBox(
-                            height: 30,
-                          ),
-
-                          /* BotonLogin */
-
-                          FadeAnimation(
-                              1.9,
-                              InkWell(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: new Container(
-                                  height: 50,
-                                  margin: EdgeInsets.symmetric(horizontal: 10),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Color.fromRGBO(49, 39, 79, 1),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      "Regresar",
-                                      style: TextStyle(color: Colors.white),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ),
-                              )),
-
-                          //fin Boton Login
-                          SizedBox(
-                            height: 30,
-                          ),
                         ],
                       ),
                     ),
@@ -656,6 +760,13 @@ class _HomePageState extends State<Registro> {
             ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        backgroundColor: Colors.red,
+        child: const Icon(Icons.reply_sharp, size: 30),
       ),
     );
   }

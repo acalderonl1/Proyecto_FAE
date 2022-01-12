@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:rancho_ala22/login_registro/login.dart';
-import 'package:rancho_ala22/perfil_pedidos/restaurantes.dart';
+import 'package:rancho_ala22/restaurantes/restaurantesala22.dart';
 import 'package:rancho_ala22/perfil/perfil_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:rancho_ala22/reservas/reserva.dart';
+import 'package:rancho_ala22/reservas/Factura.dart';
 
 void pre() async {
   SharedPreferences perfs = await SharedPreferences.getInstance();
   await perfs.clear();
 }
 
-class MenuLateral extends StatelessWidget {
+class MenuLateral extends StatefulWidget {
+  const MenuLateral({Key key, this.idcliente}) : super(key: key);
+  final int idcliente;
+  @override
+  MenuLateral1 createState() => MenuLateral1();
+}
+
+class MenuLateral1 extends State<MenuLateral> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -20,7 +30,7 @@ class MenuLateral extends StatelessWidget {
             height: 280,
             child: DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.lightBlue[600],
+                color: Colors.lightBlue[800],
               ),
               child: Column(
                 children: [
@@ -47,9 +57,16 @@ class MenuLateral extends StatelessWidget {
               style: TextStyle(fontSize: 18),
             ),
             onTap: () {
+              Fluttertoast.showToast(
+                  msg: "Perfil Usuario ;)",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Perfil_user()),
+                MaterialPageRoute(
+                    builder: (context) =>
+                        Perfil_user(idcliente: widget.idcliente)),
               );
             },
           ),
@@ -63,7 +80,9 @@ class MenuLateral extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => restaurante()),
+                MaterialPageRoute(
+                    builder: (context) =>
+                        restaurante(idcliente: widget.idcliente)),
               );
             },
           ),
@@ -73,15 +92,29 @@ class MenuLateral extends StatelessWidget {
               "Pedidos",
               style: TextStyle(fontSize: 18),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ListaCompras(idcliente: widget.idcliente)),
+              );
+            },
           ),
           ListTile(
             leading: Icon(Icons.receipt_long_outlined, size: 40),
             title: Text(
-              "Facturas",
+              "Comprobante de pago",
               style: TextStyle(fontSize: 18),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ListaFactura(idcliente: widget.idcliente)),
+              );
+            },
           ),
           ListTile(
             leading: Icon(Icons.logout, size: 40),

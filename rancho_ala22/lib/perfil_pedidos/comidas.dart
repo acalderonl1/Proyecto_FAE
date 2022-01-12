@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:rancho_ala22/Widget_/widget_drawer_menu.dart';
-import 'package:rancho_ala22/perfil_pedidos/reserva_desayuno.dart';
+import 'package:rancho_ala22/scr/ui/desayuno_page2.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:rancho_ala22/perfil/perfil_user.dart';
 
 int cantidad = 1;
 
 class comidas extends StatefulWidget {
+  const comidas({Key key, this.idcliente, this.idrestaurant}) : super(key: key);
+  final int idcliente;
+  final int idrestaurant;
   @override
   com createState() => com();
 }
@@ -26,9 +31,19 @@ class com extends State<comidas> {
           IconButton(
             icon: new Icon(
               Icons.person,
-              size: 37,
+              size: 40,
             ),
-            onPressed: () => print('envia al perfil del usuario, okis'),
+            onPressed: () {
+              Fluttertoast.showToast(
+                  msg: "Perfil Usuario ;)",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Perfil_user()),
+              );
+            },
           ),
         ],
       ),
@@ -81,10 +96,18 @@ class com extends State<comidas> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(18.0)),
                           onPressed: () {
+                            /*
+                             final int idcliente;
+  final int idrestaurant;
+  final int idtiporancho;
+                            */
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => reserva_desayuno()),
+                                  builder: (context) => Desayuno_page2(
+                                      idcliente: widget.idcliente,
+                                      idrestaurant: widget.idrestaurant,
+                                      idtiporancho: 1)),
                             );
                           },
                           color: Colors.green[300],
@@ -142,7 +165,10 @@ class com extends State<comidas> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => reserva_desayuno()),
+                                  builder: (context) => Desayuno_page2(
+                                      idcliente: widget.idcliente,
+                                      idrestaurant: widget.idrestaurant,
+                                      idtiporancho: 2)),
                             );
                           },
                           color: Colors.green[300],
@@ -200,7 +226,10 @@ class com extends State<comidas> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => reserva_desayuno()),
+                                  builder: (context) => Desayuno_page2(
+                                      idcliente: widget.idcliente,
+                                      idrestaurant: widget.idrestaurant,
+                                      idtiporancho: 3)),
                             );
                           },
                           color: Colors.green[300],
@@ -214,8 +243,18 @@ class com extends State<comidas> {
                 ],
               ),
             ),
+            SizedBox(
+              height: 60,
+            ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        backgroundColor: Colors.red,
+        child: const Icon(Icons.reply_sharp, size: 30),
       ),
     );
   }

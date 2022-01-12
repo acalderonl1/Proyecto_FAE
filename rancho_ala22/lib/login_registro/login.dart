@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:rancho_ala22/Animation/FadeAnimation.dart';
 import '/login_registro/registro.dart';
-import '/login_registro/recuperar_contrasena.dart';
-import 'package:rancho_ala22/utilities/constants.dart';
-import 'package:rancho_ala22/perfil_pedidos/restaurantes.dart';
-import 'package:rancho_ala22/perfil_pedidos/comidas.dart';
+import 'package:rancho_ala22/restaurantes/restaurantesala22.dart';
 import 'dart:convert' as convert;
-
 import 'package:http/http.dart' as http;
 /*
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 */
-import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: camel_case_types
 class login extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -24,8 +19,12 @@ class login extends StatefulWidget {
 
 class _HomePageState extends State<login> {
   final _formKey = GlobalKey<FormState>();
+  // ignore: non_constant_identifier_names
   TextEditingController UsernameLogin = new TextEditingController();
+  // ignore: non_constant_identifier_names
   TextEditingController PasswordLogin = new TextEditingController();
+  bool isLoggedIn = false;
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -38,12 +37,12 @@ class _HomePageState extends State<login> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Container(
-                height: 400,
+                height: 250,
                 child: Stack(
                   children: <Widget>[
                     Positioned(
-                      top: -40,
-                      height: 400,
+                      top: -10,
+                      height: 250,
                       width: width,
                       child: FadeAnimation(
                           1,
@@ -57,7 +56,7 @@ class _HomePageState extends State<login> {
                           ))),
                     ),
                     Positioned(
-                      height: 400,
+                      height: 250,
                       width: width + 20,
                       child: FadeAnimation(
                           1.3,
@@ -71,7 +70,7 @@ class _HomePageState extends State<login> {
                           ))),
                     ),
                     Positioned(
-                      top: 110,
+                      top: 10,
                       left: 0,
                       right: 0,
                       child: Center(
@@ -80,7 +79,7 @@ class _HomePageState extends State<login> {
                         ),
                       ),
                     ),
-                    Positioned(
+                    /*   Positioned(
                       top: 40,
                       left: 0,
                       right: 0,
@@ -92,8 +91,8 @@ class _HomePageState extends State<login> {
                             fontSize: 30),
                         textAlign: TextAlign.center,
                       ),
-                    ),
-                    Positioned(
+                    ),*/
+                    /*Positioned(
                       top: 80,
                       left: 0,
                       right: 0,
@@ -105,13 +104,13 @@ class _HomePageState extends State<login> {
                             fontSize: 30),
                         textAlign: TextAlign.center,
                       ),
-                    ),
+                    ),*/
                   ],
                 ),
               ),
-              SizedBox(
+              /* SizedBox(
                 height: 15,
-              ),
+              ),*/
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 40),
                 child: Row(
@@ -120,7 +119,7 @@ class _HomePageState extends State<login> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          FadeAnimation(
+                          /*  FadeAnimation(
                               1.5,
                               Center(
                                   child: Text(
@@ -130,7 +129,7 @@ class _HomePageState extends State<login> {
                                     fontSize: 30,
                                     fontFamily: 'OpenSans'),
                                 textAlign: TextAlign.center,
-                              ))),
+                              ))),*/
                           SizedBox(
                             height: 30,
                           ),
@@ -175,7 +174,7 @@ class _HomePageState extends State<login> {
                                             child: TextFormField(
                                               decoration: InputDecoration(
                                                 border: InputBorder.none,
-                                                hintText: "Ingrese username",
+                                                hintText: "Ingrese usuario",
                                                 hintStyle: TextStyle(
                                                     color: Colors.grey),
                                                 prefixIcon: Icon(
@@ -184,9 +183,10 @@ class _HomePageState extends State<login> {
                                                 ),
                                               ),
                                               controller: UsernameLogin,
+                                              enabled: !isLoggedIn,
                                               validator: (value) {
                                                 if (value.isEmpty) {
-                                                  return 'Por favor ingrese Usuario';
+                                                  return 'Por favor ingrese cedula';
                                                 }
                                                 return null;
                                               },
@@ -251,6 +251,7 @@ class _HomePageState extends State<login> {
                                                 hintText: 'Ingrese contraseña',
                                               ),
                                               controller: PasswordLogin,
+                                              enabled: !isLoggedIn,
                                               validator: (value) {
                                                 if (value.isEmpty) {
                                                   return 'Por favor ingrese Contraseña';
@@ -265,7 +266,7 @@ class _HomePageState extends State<login> {
                                   ],
                                 ),
                               )),
-                          SizedBox(
+                          /*  SizedBox(
                             height: 20,
                           ),
                           FadeAnimation(
@@ -278,9 +279,9 @@ class _HomePageState extends State<login> {
                                   style: TextStyle(
                                       color: Color.fromRGBO(196, 135, 198, 1)),
                                 )),
-                              )),
+                              )),*/
                           SizedBox(
-                            height: 30,
+                            height: 20,
                           ),
                           FadeAnimation(
                               1.9,
@@ -290,7 +291,7 @@ class _HomePageState extends State<login> {
                                     var user = UsernameLogin.text;
                                     var passw = PasswordLogin.text;
                                     var url = Uri.parse(
-                                        'http://192.168.10.110:3000/usuario/login/$user/$passw');
+                                        'http://192.168.68.103:3000/usuario/login/$user/$passw');
                                     print(url);
                                     // Await the http get response, then decode the json-formatted response.
                                     var response = await http.get(url);
@@ -300,33 +301,24 @@ class _HomePageState extends State<login> {
                                               as Map<String, dynamic>;
                                       var isUser = jsonResponse['msg'];
 
-                                      var id = jsonResponse['is_user'];
-                                      var nombre = jsonResponse['nombre'];
-                                      var apellido = jsonResponse['apellido'];
-                                      var correo = jsonResponse['correo'];
-                                      var fecha_ =
-                                          jsonResponse['fecha_creacion'];
-                                      SharedPreferences perfs =
-                                          await SharedPreferences.getInstance();
-                                      perfs.setInt('idUser', id);
-                                      perfs.setString('Nombre', nombre);
-                                      perfs.setString('Apellido', apellido);
-                                      perfs.setString('Correo', correo);
-                                      perfs.setString('fecha', fecha_);
+                                      var id = jsonResponse['id_person'];
 
                                       if (isUser == '1') {
-                                        print("Login correcto");
+                                        print(
+                                            "Login correcto " + id.toString());
                                         Fluttertoast.showToast(
-                                            msg: "Login correcto " + nombre,
+                                            msg: "Login correcto " + user,
                                             toastLength: Toast.LENGTH_SHORT,
                                             gravity: ToastGravity.CENTER,
                                             timeInSecForIosWeb: 1);
+
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  restaurante()),
+                                                  restaurante(idcliente: id)),
                                         );
+
                                         UsernameLogin.clear();
                                         PasswordLogin.clear();
                                       } else {
@@ -356,14 +348,17 @@ class _HomePageState extends State<login> {
                                   child: Center(
                                     child: Text(
                                       "Iniciar sesión",
-                                      style: TextStyle(color: Colors.white),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 17,
+                                      ),
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
                                 ),
                               )),
                           SizedBox(
-                            height: 30,
+                            height: 20,
                           ),
                           FadeAnimation(
                               1.9,
@@ -385,7 +380,8 @@ class _HomePageState extends State<login> {
                                   child: Center(
                                     child: Text(
                                       "Registro de usuario",
-                                      style: TextStyle(color: Colors.white),
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 17),
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -406,6 +402,7 @@ class _HomePageState extends State<login> {
       ),
     );
   }
+
 /*
   @override
   void dispose() {
@@ -413,4 +410,5 @@ class _HomePageState extends State<login> {
     UsernameLogin.dispose();
     PasswordLogin.dispose();
   }*/
+
 }

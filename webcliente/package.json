@@ -17,6 +17,8 @@
     "react-native-web": "^0.17.5",
     "react-router-dom": "^6.2.1",
     "react-scripts": "^3.4.4",
+    "reactstrap": "^9.0.1",
+    "sweetalert": "^2.1.2",
     "universal-cookie": "^4.0.4",
     "web-vitals": "^2.1.4"
   },

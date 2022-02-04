@@ -1,6 +1,7 @@
 import React from 'react';
 import './assets/css/App.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import Navbar from './assets/nav/Navbar';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Login from './components/login'
 import DashboardAdmin from './components/dashboardAdmin'
@@ -14,6 +15,7 @@ function App() {
     <div className="App">
       <React.Fragment>
         <Router>
+        <Navbar />
           <Switch>
             <Route path="/" exact render={props => (<Login {...props} />)}></Route>
             <Route path="/dashboardAdmin" exact render={props => (<DashboardAdmin {...props} />)}></Route>

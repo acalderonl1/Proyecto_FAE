@@ -2,7 +2,7 @@ const env = {
     database: 'FAE',
     schema: 'dar',
     username: 'postgres',
-    password: 'Pablono30',
+    password: '123',
     host: 'localhost',
     dialect: 'postgres',
     pool: {

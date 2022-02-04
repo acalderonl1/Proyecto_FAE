@@ -26,6 +26,9 @@ module.exports = (sequelize, Sequelize)=> {
         },
         utc: {
             type: Sequelize.DATE,
+        },
+        dia_fecha:{
+            type: Sequelize.DATE,
         }
     },
     { timestamps: false})

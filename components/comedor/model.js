@@ -17,6 +17,11 @@ module.exports = (sequelize, Sequelize)=> {
         },
         utc: {
             type: Sequelize.DATE,
+        },
+        id_grado_bajo: {
+            type: Sequelize.INTEGER,
+        }, id_grado_alto: {
+            type: Sequelize.INTEGER,
         }
     },
     { timestamps: false})

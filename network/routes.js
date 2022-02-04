@@ -108,16 +108,22 @@ module.exports = function(app) {
     app.get('/usuariorol/getAll', Usuariorol.findAll)
     app.put('/usuariorol/update/:idusuariorol', Usuariorol.update)
     app.delete('/usuariorol/delete/:idusuariorol', Usuariorol.delete)
-
+// app.get('/usuario/login/:username/:password', Procesos.filter)
+  
     /* RUTAS DE PROCESOS */
     app.post('/proceso/create', Procesos.create)
     app.get('/usuario/login/:username/:password', Procesos.filter)
-    app.get('/usuario/dataGradoPersona/:idpersona', Procesos.consultGradoPersona)
-    app.get('/usuario/dataReserva/:idpersona', Procesos.consultReserva)
-
-    
-
-
+    app.get('/usuario/datatiporancho/:idtiporancho/:idcomedor', Procesos.menudia)
+   //reserva apk movil
+    app.get('/usuario/datareserva/:idreserva', Procesos.reserva)
+    //reserva webCliente
+    app.get('/usuario/datareservaweb', Procesos.reservaWebCliente)
+    //reserva webCliente rol usuario
+    app.get('/usuario/dataperfilpersonaWeb/:idperson', Procesos.perfilUserAdmin)
+    //perfil Movil
+    app.get('/usuario/dataperfilpersona/:idperson', Procesos.perfilUser)
+    app.get('/usuario/datafactura/:idfactura', Procesos.Factura)
+    app.get('/usuario/dataRestaurant_reparto/:idpersona_', Procesos.Reparto)
 
     // created user
     // app.post('/usuario/create', usuarios.create);

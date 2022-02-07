@@ -2,7 +2,7 @@ const env = {
     database: 'FAE',
     schema: 'dar',
     username: 'postgres',
-    password: '123',
+    password: 'root',
     host: 'localhost',
     dialect: 'postgres',
     pool: {
@@ -11,6 +11,6 @@ const env = {
         acquire: 30000,
         idle: 10000
     }
-  };
-  
-  module.exports = env;
+};
+
+module.exports = env;

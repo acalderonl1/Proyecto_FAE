@@ -1,19 +1,27 @@
 {
-  "name": "vcsgye",
+  "name": "apirestfae",
   "version": "1.0.0",
-  "description": "Sistma de Informacion para la Gestion de la Vinculacion con la Sociedad.",
+  "description": "Api para crear servicios consumibles para la aplicativo movil y web del Rancho FAE",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npx nodemon server.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/acalderonl1/Proyecto_FAE.git"
+  },
   "keywords": [
-    "nodejs",
-    "vcs",
-    "gye"
+    "apirest",
+    "rancho_fae",
+    "serviciosRest"
   ],
-  "author": "Guillermo Pizarro",
+  "author": "Abdon Calderon && Mario Arguello",
   "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/acalderonl1/Proyecto_FAE/issues"
+  },
+  "homepage": "https://github.com/acalderonl1/Proyecto_FAE#readme",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",

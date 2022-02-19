@@ -133,24 +133,19 @@ tiporancho.hasOne(Menudia, {
     sourceKey: 'idtiporancho',
     targetKey: 'idtiporancho'
 });
-
-/*
-Persona.hasOne(Grado, {
-    foreignKey: {
-        name: 'idgrado',
-        allowed: false,
-    }
-});
-
-Grado.hasOne(Persona, { foreignKey: 'idgrado' });*/
-
 /* INGRESO ENTRE DOS TABLAS */
+
+
 exports.create = (req, res) => {
     var idPersonP;
     var username = req.body.username;
     var password = req.body.password;
     var estado = req.body.estado;
     var utc = req.body.utc;
+    var idUsuarioP;
+    var idrol = req.body.idrol;
+    var idcomedor = req.body.idcomedor;
+    var idreparto_useradmin = req.body.idreparto_useradmin;
     Persona.create({
         idreparto: req.body.idreparto,
         idgrado: req.body.idgrado,
@@ -166,17 +161,37 @@ exports.create = (req, res) => {
         idPersonP = persona.idpersona
         personaCreate(persona.idpersona, username, password, estado, utc)
         res.json(persona);
-    }
-    )
+
+    })
 
     function personaCreate(idpersona, username, password, estado, utc) {
-        console.log(idpersona)
         Usuario.create({
             idpersona: idpersona,
             username: username,
             password: password,
             estado: estado,
             utc: utc,
+        }).then(usuario => {
+            console.log(`Usuario: ${usuario.idusuario}`);
+            console.log(`Estado: ${usuario.estado}`);
+            idUsuarioP = usuario.idusuario
+            usuariolrolCreate(usuario.idusuario, idrol, usuario.estado, usuario.utc, idcomedor, idreparto_useradmin)
+            res.json(usuario);
+
+        }).catch(err => {
+            console.log(err)
+        });
+    }
+    function usuariolrolCreate(idusuario, idrol, estado, utc, idcomedor, idreparto_useradmin) {
+        console.log(idusuario)
+        console.log(estado)
+        Usuariorol.create({
+            idusuario: idusuario,
+            idrol: idrol,
+            estado: estado,
+            utc: utc,
+            idcomedor: idcomedor,
+            idreparto_useradmin: idreparto_useradmin,
         }).then({
             //    include: [res.json(req.body)]
         }).catch(err => {
@@ -185,49 +200,7 @@ exports.create = (req, res) => {
     }
 };
 
-/*
-exports.filter = (req, res) => {
-    var filter = {}
-    filter = {
-        where: {
-            username: req.params.username
-        }
-    }
-    Usuario.findAll(filter).then(usuario_login => {
-        if (usuario_login.length > 0) {
-            if (usuario_login[0].dataValues.password == req.params.password) {
-                res.json(
-                    {
-                        "msg": "1",
-                        "id_person": usuario_login[0].dataValues.idpersona,
-                        "idgrado": usuario_login[0].dataValues.nombres,
-                    }
-                )
-            } else {
-                res.json(
-                    {
-                        "msg": "constraseña incorrecta"
-                    }
-                )
-            }
-        } else {
-            res.json(
-                {
-                    "msg": "Usuario no existe"
-                }
-            )
-        }
-    }).catch(err => {
-        console.log(err);
-        res.status(500).json(
-            {
-                msg: "error", details: err
-            }
-        )
-    })
-}
-*/
-/* INICIO DE SESION */
+
 exports.filter = (req, res) => {
     Usuario.findAll({
         where: {
@@ -235,21 +208,22 @@ exports.filter = (req, res) => {
         },
         include: [{
             model: Usuariorol,
-        },{
+        }, {
             model: Persona,
-            include:{model:Grado},
+            include: [{ model: Grado }, { model: Reparto }],
         }],
     }).then(usuario_login => {
         if (usuario_login.length > 0) {
             if (usuario_login[0].dataValues.password == req.params.password) {
                 res.json(
-                    { usuario_login,
+                    {
+                        usuario_login,
                         "msg": "1",
                         "id_person": usuario_login[0].dataValues.idpersona,
-                        "idgrado": usuario_login[0].dataValues.nombres,
                         "id_rol": usuario_login[0].dataValues.usuariorol.idrol,
                         "estado_rol": usuario_login[0].dataValues.usuariorol.estado,
                         "grado_persona": usuario_login[0].dataValues.persona.grado.idgrado,
+                        "reparto_persona": usuario_login[0].dataValues.persona.reparto.idreparto,
                     }
                 )
             } else {
@@ -283,9 +257,7 @@ exports.menudia = (req, res) => {
     const { Op } = require("sequelize");
     Menudia.findAll({
         where: {
-            estado: {
-                [Op.like]: 'A%'
-            }
+            estado: 'A'
         },
         order: [
             ['dia_fecha', 'ASC'],
@@ -316,7 +288,7 @@ exports.menudia = (req, res) => {
     })
 }
 
-/*
+
 exports.consult = (req, res) => {
     Persona.findAll({
         // attributes: ['nombres'],
@@ -334,7 +306,7 @@ exports.consult = (req, res) => {
         )
     })
 
-} */
+}
 
 exports.perfilUserAdmin = (req, res) => {
     const { Op } = require("sequelize");
@@ -358,6 +330,8 @@ exports.perfilUserAdmin = (req, res) => {
         )
     })
 }
+
+
 exports.perfilUser = (req, res) => {
     const { Op } = require("sequelize");
     Usuario.findAll({
@@ -385,49 +359,6 @@ exports.perfilUser = (req, res) => {
     })
 }
 
-// llamado de las reservas realizadas por medio del id de la pesona
-exports.reservaWebCliente = (req, res) => {
-    const { Op } = require("sequelize");
-    reserva.findAll({
-        where: {
-            [Op.or]: [
-                {
-                    estado: {
-                        [Op.like]: 'P%'
-                    }
-                },
-                {
-                    estado: {
-                        [Op.like]: 'A%'
-                    }
-                }
-            ]
-        },
-        include: [{
-            model: Persona, attributes: ['idpersona', 'nombres', 'correo', 'telefono', 'dni'],
-            include: { model: Usuario },
-        }, {
-            model: Menudia, attributes: ['idmenudia', 'idmenu', 'idtiporancho', 'idcomedor', 'dia', 'precio', 'dia_fecha'],
-            where: { idcomedor: 1 },
-            include: [{
-                model: Menu, attributes: ['idmenu', 'descripcion'],
-            },
-            { model: tiporancho, attributes: ['idtiporancho', 'nombre'] },
-            {
-                model: comedor, attributes: ['nombre']
-            }],
-        }],
-    }).then(reserva => {
-        res.json(reserva)
-    }).catch(err => {
-        console.log(err);
-        res.status(500).json(
-            {
-                msg: "error", details: err
-            }
-        )
-    })
-}
 
 // llamado de las reservas realizadas por medio del id de la pesona
 exports.reserva = (req, res) => {
@@ -437,14 +368,10 @@ exports.reserva = (req, res) => {
             idpersona: req.params.idreserva,
             [Op.or]: [
                 {
-                    estado: {
-                        [Op.like]: 'P%'
-                    }
+                    estado: 'P'
                 },
                 {
-                    estado: {
-                        [Op.like]: 'A%'
-                    }
+                    estado: 'A'
                 }
             ]
         },
@@ -478,10 +405,10 @@ exports.Factura = (req, res) => {
     reserva.findAll({
 
         where: {
-            idpersona: req.params.idfactura,
-            estado: {
-                [Op.like]: 'C%'
-            }
+            [Op.or]: [
+                { idpersona: req.params.idfactura },
+                { estado: 'C' }
+            ]
         },
         include: {
             model: Menudia, attributes: ['idmenudia', 'idmenu', 'idtiporancho', 'dia', 'precio'],
@@ -505,19 +432,15 @@ exports.Factura = (req, res) => {
         )
     })
 }
+
 // Comedor con su respectivo reparto
-exports.Reparto = (req, res) => {
+
+exports.Repartocomedor = (req, res) => {
     const { Op } = require("sequelize");
-    Persona.findOne({
+    comedor.findAll({
         where: {
-            idreparto: req.params.idpersona_,
+            idreparto: req.params.idreparto_,
         },
-        include: [{
-            model: Reparto,
-            include: {
-                model: comedor,
-            },
-        },]
     }).then(reserva => {
         res.json(reserva)
     }).catch(err => {
@@ -529,3 +452,79 @@ exports.Reparto = (req, res) => {
         )
     })
 }
+
+//consultas web adminCliente
+// llamado de las reservas realizadas por medio del id de la pesona
+exports.reservaWebCliente = (req, res) => {
+    const { Op } = require("sequelize");
+    reserva.findAll({
+        where: {
+            [Op.or]: [
+                {
+                    estado: 'P'
+                },
+                {
+                    estado: 'A'
+
+                }
+            ]
+        },
+        include: [{
+            model: Persona, attributes: ['idpersona', 'nombres', 'correo', 'telefono', 'dni'],
+            include: { model: Usuario },
+        }, {
+            model: Menudia, attributes: ['idmenudia', 'idmenu', 'idtiporancho', 'idcomedor', 'dia', 'precio', 'dia_fecha'],
+            where: { idcomedor: 1 },
+            include: [{
+                model: Menu, attributes: ['idmenu', 'descripcion'],
+            },
+            { model: tiporancho, attributes: ['idtiporancho', 'nombre'] },
+            {
+                model: comedor, attributes: ['nombre']
+            }],
+        }],
+    }).then(reserva => {
+        res.json(reserva)
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json(
+            {
+                msg: "error", details: err
+            }
+        )
+    })
+}
+
+exports.menudiawebCliente = (req, res) => {
+    const { Op } = require("sequelize");
+    comedor.findAll({
+        where: {
+            [Op.and]: [
+                { idcomedor: req.params.idcomedor },
+                { idreparto: req.params.idreparto },
+                { estado: 'A' }
+            ]
+        },
+        include: {
+            model: Menudia,
+            where: {
+                estado: 'A'
+            },
+            include: [{
+                model: Menu,
+            }, {
+                model: tiporancho
+            }]
+        },
+    }).then(reserva => {
+        res.json(reserva)
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json(
+            {
+                msg: "error", details: err
+            }
+        )
+    })
+}
+

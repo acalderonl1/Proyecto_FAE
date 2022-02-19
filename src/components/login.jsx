@@ -7,6 +7,10 @@ import logo from '../assets/img/logo.png';
 import { Apiurl } from '../services/apirest';
 //Librerias
 import axios from 'axios';
+//cookies
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 
 class login extends React.Component {
@@ -42,19 +46,21 @@ class login extends React.Component {
     }
 
 
-    manejadorBoton = () => {
+    manejadorBoton = async () => {
         let username = this.state.form.username
         let password = this.state.form.password
 
         let url = Apiurl + `/usuario/login/${username}/${password}`;
-        axios.get(url, this.state.form)
+        await axios.get(url, this.state.form)
             .then(response => {
                 console.log(response.data)
-                if (response.data.msg === "1" && response.data.id_rol === 1) {
+                if (response.data.msg === "1" && response.data.id_rol === 1 && response.data.length > 0) {
+
                     this.props.history.push("/dashboardAdmin")
+
                 }
                 if (response.data.msg === "1" && response.data.id_rol === 2) {
-                    this.props.history.push("/dashboardClient")
+                    this.props.history.push("/crearMenu")
                 } else {
                     this.setState({
                         error: true,
@@ -74,37 +80,39 @@ class login extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <div className="container">
-                    <div className="row">
-                        <div className="col-md-11 mt-60 mx-md-auto">
-                            <div className="login-box bg-white pl-lg-5 pl-0">
-                                <div className="row no-gutters align-items-center">
-                                    <div className="col-md-6">
-                                        <div className="form-wrap bg-white">
-                                            <form onSubmit={this.manejadorSubmit}>
-                                                <h4 align="center">Rancho Ala 22</h4>
-                                                <input type="text" id="username" className="fadeIn second" name="username" placeholder="usuario" onChange={this.manejadorChange} />
-                                                <input type="password" id="password" className="fadeIn third" name="password" placeholder="Contraseña" onChange={this.manejadorChange} />
-                                                <input type="submit" className="fadeIn fourth" value="Iniciar Sesión" onClick={this.manejadorBoton} />
-                                            </form>
+                <div className="bodylogin">
+                    <div className="container wrapper">
+                        <div className="row">
+                            <div className="col-md-11 mt-60 mx-md-auto">
+                                <div className="login-box bg-white pl-lg-5 pl-0">
+                                    <div className="row no-gutters align-items-center">
+                                        <div className="col-md-6">
+                                            <div className="form-wrap bg-white">
+                                                <form onSubmit={this.manejadorSubmit}>
+                                                    <h4 align="center">Rancho Ala 22</h4>
+                                                    <input type="text" id="username" className="fadeIn second" name="username" placeholder="Usuario" onChange={this.manejadorChange} />
+                                                    <input type="password" id="password" className="fadeIn third" name="password" placeholder="Contraseña" onChange={this.manejadorChange} />
+                                                    <input type="submit" className="fadeIn fourth" value="Iniciar Sesión" onClick={this.manejadorBoton} />
+                                                </form>
 
 
-                                            {/* control de error */}
-                                            {this.state.error === true &&
-                                                <div className="alert alert-danger" role="alert">
-                                                    {this.state.errorMsg}
-                                                </div>
-                                            }
+                                                {/* control de error */}
+                                                {this.state.error === true &&
+                                                    <div className="alert alert-danger" role="alert">
+                                                        {this.state.errorMsg}
+                                                    </div>
+                                                }
 
 
-                                        </div>
-                                    </div>
-                                    <div className="col-md-6">
-                                        <div className="content text-center">
-                                            <div className="border-bottom pb-5 mb-2">
-                                                <img src={logo} alt="" />
                                             </div>
-                                            <small>@Desarrolado por Abdón Calderón</small>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <div className="content text-center">
+                                                <div className="border-bottom pb-5 mb-2">
+                                                    <img src={logo} alt="" />
+                                                </div>
+                                                <small>@Desarrolado por Abdón Calderón</small>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
